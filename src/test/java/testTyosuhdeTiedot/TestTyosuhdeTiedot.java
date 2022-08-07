@@ -182,7 +182,7 @@ public class TestTyosuhdeTiedot {
         var tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
                 new TyoHistoria(testiKausiData), viikkoTyoAika);
         var d = tst.laskennallinenPalkka(testiKausi);
-        assertEquals(
+        assertEquals("Laskennallinen palkka viikkotyöajalla",
                 new BigDecimal(testiKausiData.length).multiply(viikkoTyoAika)
                         .multiply(new BigDecimal("0.2")).multiply(tuntiPalkka),
                 d);
@@ -190,15 +190,6 @@ public class TestTyosuhdeTiedot {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), th);
-        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
-        d = tst.laskennallinenPalkka(testiKausi);
-        BigDecimal edellisen12vkTyotunnit = new BigDecimal("205.75");
-        assertEquals(
-                new BigDecimal(testiKausiData.length)
-                        .multiply(edellisen12vkTyotunnit).multiply(tuntiPalkka)
-                        .divide(new BigDecimal(5 * 12), 3, RoundingMode.HALF_UP)
-                        .setScale(2, RoundingMode.HALF_UP),
-                d.setScale(2, RoundingMode.HALF_UP));
 
         testiKausiData = new String[] { "1.12.2009|vanhempainvapaa|",
                 "2.12.2009|vanhempainvapaa||", "3.12.2009|vanhempainvapaa||",
@@ -218,20 +209,9 @@ public class TestTyosuhdeTiedot {
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         d = tst.laskennallinenPalkka(testiKausi);
         tuntiPalkka = new BigDecimal(11);
-        assertEquals("Laskennallinen palkka viikkotyöajalla ",
+        assertEquals("Laskennallinen palkka viikkotyöajalla pohjatiedostosta",
                 new BigDecimal(testiKausiData.length).multiply(viikkoTyoAika)
                         .multiply(new BigDecimal("0.2")).multiply(tuntiPalkka)
-                        .setScale(2, RoundingMode.HALF_UP),
-                d.setScale(2, RoundingMode.HALF_UP));
-
-        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
-        tst = new TyoSuhdeTiedot(LocalDate.of(2008, 10, 1), th);
-        d = tst.laskennallinenPalkka(testiKausi);
-        edellisen12vkTyotunnit = new BigDecimal("374.5");
-        assertEquals("Laskennallinen palkka ilman määrättyä viikkotyöaikaa ",
-                new BigDecimal(testiKausiData.length)
-                        .multiply(edellisen12vkTyotunnit).multiply(tuntiPalkka)
-                        .divide(new BigDecimal(5 * 12), 5, RoundingMode.HALF_UP)
                         .setScale(2, RoundingMode.HALF_UP),
                 d.setScale(2, RoundingMode.HALF_UP));
     }
@@ -258,7 +238,7 @@ public class TestTyosuhdeTiedot {
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         var d = tst.laskennallinenPalkka(testiKausi);
         BigDecimal edellisen12vkTyotunnit = new BigDecimal("205.75");
-        assertEquals(
+        assertEquals("Laskennallinen palkka ilman määrättyä viikkotyöaikaa",
                 new BigDecimal(testiKausiData.length)
                         .multiply(edellisen12vkTyotunnit).multiply(tuntiPalkka)
                         .divide(new BigDecimal(5 * 12), 3, RoundingMode.HALF_UP)
@@ -284,7 +264,8 @@ public class TestTyosuhdeTiedot {
         d = tst.laskennallinenPalkka(testiKausi);
         tuntiPalkka = new BigDecimal(11);
         edellisen12vkTyotunnit = new BigDecimal("374.5");
-        assertEquals("Laskennallinen palkka ilman määrättyä viikkotyöaikaa ",
+        assertEquals(
+                "Laskennallinen palkka ilman määrättyä viikkotyöaikaa pohjatiedostosta",
                 new BigDecimal(testiKausiData.length)
                         .multiply(edellisen12vkTyotunnit).multiply(tuntiPalkka)
                         .divide(new BigDecimal(5 * 12), 5, RoundingMode.HALF_UP)

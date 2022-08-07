@@ -25,54 +25,44 @@ public class TestTyoPaivaMerkinta {
      */
     @Test
     public void testaaMerkkijonostaParsiminen() {
-        String tyoPaiva = "23.1.2009|||||||||||||||||||||||||";
-        var pvm = LocalDate.of(2009, 1, 23);
-        TyoPaivaMerkinta tulos = new TyoPaivaMerkinta(pvm, "tasausPaiva", "",
-                "", "0", "0", "0", "0", "10");
-        assertEquals(true, tulos.equals(new TyoPaivaMerkinta(tyoPaiva)));
+        String[] tyoPaivat = { "23.1.2009|||||||||||||||||||||||||",
+                "17.4.2009|||9-14|5|5|5|||||||||||||||||||",
+                "21.5.2009|Arkipyhäkorvaukset|||7,5|||||||||||||||||||||",
+                "26.6.2009|||9-16:30|7,5|7,5|7,5|64,40 €||||||||||||||||||",
+                "15.10.2009|||9-16:30|7,5|7,5|7,5||Oletus: tuntipalkka on 11 euroa / tunti|||||||||||||||||",
+                "14.10.2009|||9-16:30|7,5|7,5|7,5|||||||||||||||||||" };
+        LocalDate[] paivaMaarat = { LocalDate.of(2009, 1, 23),
+                LocalDate.of(2009, 4, 17), LocalDate.of(2009, 5, 21),
+                LocalDate.of(2009, 6, 26), LocalDate.of(2009, 10, 15),
+                LocalDate.of(2009, 10, 14) };
+        TyoPaivaMerkinta tulokset[] = {
+                new TyoPaivaMerkinta(paivaMaarat[0], "tasausPaiva", "", "", "0",
+                        "0", "0", "0", "10"),
+                new TyoPaivaMerkinta(paivaMaarat[1], "", "", "9-14", "5", "5",
+                        "5", "0", "10"),
+                new TyoPaivaMerkinta(paivaMaarat[2], "Arkipyhäkorvaukset", "",
+                        "", "7.5", "0", "0", "0", "10"),
+                new TyoPaivaMerkinta(paivaMaarat[3], "", "", "9-16:30", "7.5",
+                        "7.5", "7.5", "64.40", "10"),
+                new TyoPaivaMerkinta(paivaMaarat[4], "", "", "9-16:30", "7.5",
+                        "7.5", "7.5", "0", "11"),
+                new TyoPaivaMerkinta(paivaMaarat[5], "", "", "9-16:30", "7.5",
+                        "7.5", "7.5", "0", "10") };
+        for (int i = 0; i < tyoPaivat.length; i++)
+            assertEquals("kierros " + i, true,
+                    tulokset[i].equals(new TyoPaivaMerkinta(tyoPaivat[i])));
 
-        String tyoPaiva2 = "17.4.2009|||9-14|5|5|5|||||||||||||||||||";
-        var pvm2 = LocalDate.of(2009, 4, 17);
-        TyoPaivaMerkinta tulos2 = new TyoPaivaMerkinta(pvm2, "", "", "9-14",
-                "5", "5", "5", "0", "10");
-        assertEquals(true, tulos2.equals(new TyoPaivaMerkinta(tyoPaiva2)));
+        TyoPaivaMerkinta tulos = new TyoPaivaMerkinta(paivaMaarat[3], "", "",
+                "9-16:23", "7.5", "7.5", "7.5", "64.4", "10");
+        assertEquals(false, tulos.equals(new TyoPaivaMerkinta(tyoPaivat[3])));
 
-        String tyoPaiva3 = "21.5.2009|Arkipyhäkorvaukset|||7,5|||||||||||||||||||||";
-        var pvm3 = LocalDate.of(2009, 5, 21);
-        TyoPaivaMerkinta tulos3 = new TyoPaivaMerkinta(pvm3,
-                "Arkipyhäkorvaukset", "", "", "7.5", "0", "0", "0", "10");
-        assertEquals(true, tulos3.equals(new TyoPaivaMerkinta(tyoPaiva3)));
+        tulos = new TyoPaivaMerkinta(paivaMaarat[3], "", "", "9-16:30", "7.5",
+                "7.5", "7.5", "64.2", "10");
+        assertEquals(false, tulos.equals(new TyoPaivaMerkinta(tyoPaivat[3])));
 
-        String tyoPaiva4 = "26.6.2009|||9-16:30|7,5|7,5|7,5|64,40 €||||||||||||||||||";
-        var pvm4 = LocalDate.of(2009, 6, 26);
-
-        TyoPaivaMerkinta tulos4 = new TyoPaivaMerkinta(pvm4, "", "", "9-16:30",
-                "7.5", "7.5", "7.5", "64.40", "10");
-        assertEquals(true, tulos4.equals(new TyoPaivaMerkinta(tyoPaiva4)));
-
-        tulos4 = new TyoPaivaMerkinta(pvm4, "", "", "9-16:23", "7.5", "7.5",
-                "7.5", "64.4", "10");
-        assertEquals(false, tulos4.equals(new TyoPaivaMerkinta(tyoPaiva4)));
-
-        tulos4 = new TyoPaivaMerkinta(pvm4, "", "", "9-16:30", "7.5", "7.5",
-                "7.5", "64.2", "10");
-        assertEquals(false, tulos4.equals(new TyoPaivaMerkinta(tyoPaiva4)));
-
-        tulos4 = new TyoPaivaMerkinta(pvm4, "", "", "9-16:30", "7.5", "7.5",
-                "7.5", "64.0", "3");
-        assertEquals(false, tulos4.equals(new TyoPaivaMerkinta(tyoPaiva4)));
-
-        String tyoPaiva5 = "15.10.2009|||9-16:30|7,5|7,5|7,5||Oletus: tuntipalkka on 11 euroa / tunti|||||||||||||||||";
-        var pvm5 = LocalDate.of(2009, 10, 15);
-        TyoPaivaMerkinta tulos5 = new TyoPaivaMerkinta(pvm5, "", "", "9-16:30",
-                "7.5", "7.5", "7.5", "0", "11");
-        assertEquals(true, tulos5.equals(new TyoPaivaMerkinta(tyoPaiva5)));
-
-        String tyoPaiva6 = "14.10.2009|||9-16:30|7,5|7,5|7,5|||||||||||||||||||";
-        var pvm6 = LocalDate.of(2009, 10, 14);
-        TyoPaivaMerkinta tulos6 = new TyoPaivaMerkinta(pvm6, "", "", "9-16:30",
-                "7.5", "7.5", "7.5", "0", "10");
-        assertEquals(true, tulos6.equals(new TyoPaivaMerkinta(tyoPaiva6)));
+        tulos = new TyoPaivaMerkinta(paivaMaarat[3], "", "", "9-16:30", "7.5",
+                "7.5", "7.5", "64.0", "3");
+        assertEquals(false, tulos.equals(new TyoPaivaMerkinta(tyoPaivat[3])));
     }
 
 
