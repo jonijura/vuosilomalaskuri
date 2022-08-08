@@ -68,6 +68,69 @@ public class VuosilomaPalkkalaskelma {
     private int lomaPaivia;
 
     /**
+     * 
+     */
+    private BigDecimal ansiotIlmanYliTaiHata;
+
+    /**
+     * @return
+     */
+    public BigDecimal getAnsiotIlmanYliTaiHata() {
+        return ansiotIlmanYliTaiHata;
+    }
+
+
+    /**
+     * @param ansiotIlmanYliTaiHata
+     */
+    public void setAnsiotIlmanYliTaiHata(BigDecimal ansiotIlmanYliTaiHata) {
+        this.ansiotIlmanYliTaiHata = ansiotIlmanYliTaiHata;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getLaskennallisiaTyopaivia() {
+        return laskennallisiaTyopaivia;
+    }
+
+
+    /**
+     * @param laskennallisiaTyopaivia
+     */
+    public void setLaskennallisiaTyopaivia(BigDecimal laskennallisiaTyopaivia) {
+        this.laskennallisiaTyopaivia = laskennallisiaTyopaivia;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getTuntipalkkaisenLomapalkkaKerroin() {
+        return tuntipalkkaisenLomapalkkaKerroin;
+    }
+
+
+    /**
+     * @param tuntipalkkaisenLomapalkkaKerroin
+     */
+    public void setTuntipalkkaisenLomapalkkaKerroin(
+            BigDecimal tuntipalkkaisenLomapalkkaKerroin) {
+        this.tuntipalkkaisenLomapalkkaKerroin = tuntipalkkaisenLomapalkkaKerroin;
+    }
+
+    /**
+     * 
+     */
+    private BigDecimal laskennallisiaTyopaivia;
+
+    /**
+     * 
+     */
+    private BigDecimal tuntipalkkaisenLomapalkkaKerroin;
+
+    /**
      * @return
      */
     public BigDecimal getLomaVuodenAnsiot() {
@@ -152,6 +215,23 @@ public class VuosilomaPalkkalaskelma {
      */
     public BigDecimal getLomaPalkka() {
         return lomaPalkka;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getViikottaisienTyopaivienMaaraJaettunaViidella() {
+        return tyoSuhdeTiedot.getTyopaiviaViikossa().divide(new BigDecimal(5));
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getKeskimaarainenPaivapalkka() {
+        return ansiotIlmanYliTaiHata.divide(laskennallisiaTyopaivia, 5,
+                RoundingMode.HALF_UP);
     }
 
 
@@ -267,6 +347,32 @@ public class VuosilomaPalkkalaskelma {
                     + viikkoPalkka.setScale(2, RoundingMode.HALF_UP) + " / 5 * "
                     + lomaPaivia + " + " + bonukset + " * " + korvausProsentti
                     + " = " + lomaPalkka;
+        case TuntiPalkka:
+            return "Tuntipalkkaperusteinen lomapalkka\r\n\r\n"
+                    + "Lomanmääräytymisvuoden ansio työssäolon ajalta ilman\r\n"
+                    + "yli- ja hätätöiden korotusosia\r\n" + "\t"
+                    + ansiotIlmanYliTaiHata.setScale(2, RoundingMode.HALF_UP)
+                    + " €\r\n\r\n" + "Tehdyt työpäivät + 1/8 ylitöistä\r\n"
+                    + "\t"
+                    + laskennallisiaTyopaivia.setScale(2, RoundingMode.HALF_UP)
+                    + "\r\n\r\n" + "Keskimääräinen päiväpalkka\r\n" + "\t"
+                    + ansiotIlmanYliTaiHata.setScale(2, RoundingMode.HALF_UP)
+                    + " : "
+                    + laskennallisiaTyopaivia.setScale(2, RoundingMode.HALF_UP)
+                    + " = "
+                    + getKeskimaarainenPaivapalkka().setScale(2,
+                            RoundingMode.HALF_UP)
+                    + " €\r\n\r\n"
+                    + "Viikoittaisten työpäivien määrä jaettuna viidellä\r\n"
+                    + "\t" + getViikottaisienTyopaivienMaaraJaettunaViidella()
+                    + "\r\n\r\n" + "Vuosilomalain mukainen kerroin \r\n" + "\t "
+                    + tuntipalkkaisenLomapalkkaKerroin + " \r\n\r\n"
+                    + "lomaPalkka\r\n" + "\t"
+                    + getKeskimaarainenPaivapalkka().setScale(2,
+                            RoundingMode.HALF_UP)
+                    + " * " + getViikottaisienTyopaivienMaaraJaettunaViidella()
+                    + " * " + tuntipalkkaisenLomapalkkaKerroin + " = "
+                    + lomaPalkka;
         default:
             return "";
         }

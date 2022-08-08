@@ -272,7 +272,7 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
             return tyonVeroisiaPaivia >= 14;
         }
         BigDecimal tyossaolonVeroisetVapaapaivat = new BigDecimal(
-                tyonVeroisiaPaivia - tyoHistoria.getTyoPaivienLkm());
+                tyonVeroisiaPaivia - kuunTyoHistoria.getTyoPaivienLkm());
         BigDecimal tyossaOlonVeroisiaTunteja = kuunTyoHistoria.getTyoAika()
                 .add(tyossaolonVeroisetVapaapaivat
                         .multiply(sopimuksenMukainenPaivatyoaika()));

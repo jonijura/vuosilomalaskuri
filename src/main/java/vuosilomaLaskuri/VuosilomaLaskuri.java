@@ -4,7 +4,6 @@
 package vuosilomaLaskuri;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
@@ -76,9 +75,9 @@ public class VuosilomaLaskuri {
                 .getLomapaivaKerroin(sopimuksenKestoYliVuoden);
         vuosilomaPalkkalaskelma.setLomaPaivaKerroin(lomapaivaKerroin);
         vuosilomaPalkkalaskelma.setTaysiaTyoKuukausia(lomanMaaraytymiskk);
-        return (int) lomapaivaKerroin
-                .multiply(new BigDecimal(lomanMaaraytymiskk))
-                .round(new MathContext(0, RoundingMode.HALF_UP)).longValue();
+        return (int) (lomapaivaKerroin
+                .multiply(new BigDecimal(lomanMaaraytymiskk)))
+                        .setScale(0, RoundingMode.HALF_UP).longValue();
     }
 
 
@@ -170,6 +169,7 @@ public class VuosilomaLaskuri {
         LocalDate lomakaudenEnsimmainenPaiva = LocalDate.of(vuosi - 1, 4, 1);
         BigDecimal kerroin = vuosilomaEhdot
                 .getTuntipalkkaisenLomapalkkaKerroin(laskeLomapaivat(vuosi));
+        vuosilomaPalkkalaskelma.setTuntipalkkaisenLomapalkkaKerroin(kerroin);
         BigDecimal tyossaOloajanPalkka = tyoSuhdeTiedot.getValinPalkka(
                 lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
         BigDecimal hataToistaSaatuPalkka = tyoSuhdeTiedot.getValinPalkka(
@@ -187,8 +187,11 @@ public class VuosilomaLaskuri {
         BigDecimal tyoPaiviaViikossa = tyoSuhdeTiedot.getTyopaiviaViikossa();
         BigDecimal palkkaIlmanYliHata = tyossaOloajanPalkka
                 .subtract(hataToistaSaatuPalkka.add(ylitoistaSaatuPalkka));
+        vuosilomaPalkkalaskelma.setAnsiotIlmanYliTaiHata(palkkaIlmanYliHata);
         BigDecimal laskennallisiaTyopaivia = tehtyjenTyopaivienMaara
                 .add(ylityoTunteja.multiply(new BigDecimal("0.125")));
+        vuosilomaPalkkalaskelma
+                .setLaskennallisiaTyopaivia(laskennallisiaTyopaivia);
         BigDecimal keskimaarainenViikkotyoAika = tyoPaiviaViikossa
                 .multiply(new BigDecimal("0.2"));
         return palkkaIlmanYliHata

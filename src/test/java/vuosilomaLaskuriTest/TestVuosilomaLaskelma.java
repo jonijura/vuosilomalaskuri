@@ -34,14 +34,26 @@ import vuosilomaLaskuri.VuosilomaPalkkalaskelma;
 public class TestVuosilomaLaskelma {
 
     /**
-     * 
+     * tehtävänannon testitapaus A
      */
     private VuosilomaPalkkalaskelma vlplA;
 
     /**
-     * 
+     * tehtävänannon testitapaus B
      */
     private VuosilomaPalkkalaskelma vlplB;
+
+    /**
+     * testitapaus B lisäoletuksella että lomapalkka lasketaan 
+     * vuosilomalain tuntipalkkaisen lomapalkan perusteella.
+     */
+    private VuosilomaPalkkalaskelma vlplC;
+
+    /**
+     * testitapaus B lisäoletuksella että lomapalkka lasketaan 
+     * vuosilomalain viikkopalkkaisen lomapalkan perusteella.
+     */
+    private VuosilomaPalkkalaskelma vlplD;
 
     /**
      * 
@@ -53,6 +65,12 @@ public class TestVuosilomaLaskelma {
         var tstA = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th);
         var tstB = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
                 new BigDecimal("37.5"));
+        var tstC = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
+                new BigDecimal("37.5"));
+        tstC.setLomapalkanLaskutapa(LomapalkanLaskutapa.TuntiPalkka);
+        var tstD = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
+                new BigDecimal("37.5"));
+        tstD.setLomapalkanLaskutapa(LomapalkanLaskutapa.ViikkoPalkka);
 
         var vle = new VuosilomaEhdot();
         /**
@@ -68,9 +86,13 @@ public class TestVuosilomaLaskelma {
 
         var vllA = new VuosilomaLaskuri(tstA, vle);
         var vllB = new VuosilomaLaskuri(tstB, vle);
+        var vllC = new VuosilomaLaskuri(tstC, vle);
+        var vllD = new VuosilomaLaskuri(tstD, vle);
 
         vlplA = vllA.laskePalkkalaskelma(2010);
         vlplB = vllB.laskePalkkalaskelma(2010);
+        vlplC = vllC.laskePalkkalaskelma(2010);
+        vlplD = vllD.laskePalkkalaskelma(2010);
 
     }
 
@@ -95,6 +117,10 @@ public class TestVuosilomaLaskelma {
                 AnsaintaSaanto.Yli14PvKuukaudessa);
         assertEquals("ansaintasääntö testitapaus B", vlplB.getAnsaintaSaanto(),
                 AnsaintaSaanto.Yli14PvKuukaudessa);
+        assertEquals("ansaintasääntö testitapaus C", vlplC.getAnsaintaSaanto(),
+                AnsaintaSaanto.Yli14PvKuukaudessa);
+        assertEquals("ansaintasääntö testitapaus D", vlplD.getAnsaintaSaanto(),
+                AnsaintaSaanto.Yli14PvKuukaudessa);
     }
 
 
@@ -117,6 +143,12 @@ public class TestVuosilomaLaskelma {
         assertEquals("lomapalkan lakutapa testitapaus B",
                 LomapalkanLaskutapa.Prosenttiperusteinen,
                 vlplB.getLomapalkanLaskutapa());
+        assertEquals("lomapalkan lakutapa testitapaus C",
+                LomapalkanLaskutapa.TuntiPalkka,
+                vlplC.getLomapalkanLaskutapa());
+        assertEquals("lomapalkan lakutapa testitapaus D",
+                LomapalkanLaskutapa.ViikkoPalkka,
+                vlplD.getLomapalkanLaskutapa());
     }
 
 
@@ -133,68 +165,151 @@ public class TestVuosilomaLaskelma {
     public void testaaLomapaivienLkm() {
         assertEquals("Lomapäiväkerroin testitapaus A", new BigDecimal("2.5"),
                 vlplA.getLomaPaivaKerroin());
-        assertEquals("Lomapäiväkerroin testitapaus B", new BigDecimal("2.5"),
-                vlplB.getLomaPaivaKerroin());
         assertEquals("Lomapäivien lukumäärä testitapaus A", 25,
                 vlplA.getLomapaivienLkm());
+        assertEquals("Lomapäiväkerroin testitapaus B", new BigDecimal("2.5"),
+                vlplB.getLomaPaivaKerroin());
         assertEquals("Lomapäivien lukumäärä testitapaus B", 25,
                 vlplB.getLomapaivienLkm());
+        assertEquals("Lomapäiväkerroin testitapaus C", new BigDecimal("2.5"),
+                vlplC.getLomaPaivaKerroin());
+        assertEquals("Lomapäivien lukumäärä testitapaus C", 25,
+                vlplC.getLomapaivienLkm());
+        assertEquals("Lomapäiväkerroin testitapaus D", new BigDecimal("2.5"),
+                vlplD.getLomaPaivaKerroin());
+        assertEquals("Lomapäivien lukumäärä testitapaus D", 25,
+                vlplD.getLomapaivienLkm());
     }
 
 
     /**
-     * 
+     * Vuosilomalaki 11§
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden aikana 
+     * työssäolon ajalta työntekijälle maksettu tai maksettavaksi erääntynyt 
+     * palkka, hätätyöstä ja lain tai sopimuksen mukaisesta ylityöstä peruspalkan 
+     * lisäksi maksettavaa korotusta lukuun ottamatta, jaetaan lomanmääräytymisvuoden 
+     * aikana tehtyjen työpäivien määrällä, johon lisätään laissa säädetyn 
+     * vuorokautisen säännöllisen työajan tai, jos laissa ei ole säädetty säännöllisen 
+     * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
+     * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
      */
     @Test
-    public void testaaTyoPaivienLkm() {
-        // tyopaivia
-        // tyonveroisiaPaivia
-        // ei koske testitapauksia
+    public void testaaAnsiotIlmanYliJaHata() {
+        assertEquals("Ansiot ilman yli- ja hätätöiden lisiä testitapaus C",
+                new BigDecimal("13945.00"), vlplC.getAnsiotIlmanYliTaiHata()
+                        .setScale(2, RoundingMode.HALF_UP));
     }
 
 
     /**
-     * 
+     * Vuosilomalaki 11§
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden aikana 
+     * työssäolon ajalta työntekijälle maksettu tai maksettavaksi erääntynyt 
+     * palkka, hätätyöstä ja lain tai sopimuksen mukaisesta ylityöstä peruspalkan 
+     * lisäksi maksettavaa korotusta lukuun ottamatta, jaetaan lomanmääräytymisvuoden 
+     * aikana tehtyjen työpäivien määrällä, johon lisätään laissa säädetyn 
+     * vuorokautisen säännöllisen työajan tai, jos laissa ei ole säädetty säännöllisen 
+     * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
+     * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
      */
     @Test
-    public void testaaYlitoidenJaHatatoidenLkm() {
-        // ei koske testitapauksia
+    public void testaaTyoPaivienJaYlitoidenLkm() {
+        assertEquals("Työpäivät ja kahdeksasosa ylitöistä testitapaus C",
+                new BigDecimal(196), vlplC.getLaskennallisiaTyopaivia()
+                        .setScale(0, RoundingMode.HALF_UP));
     }
 
 
     /**
-     * 
-     */
-    @Test
-    public void testaaYhdisttyTyopaivatJaHatatyot() {
-        // ei koske testitapauksia
-    }
-
-
-    /**
-     * 
+     * Vuosilomalaki 11§
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden aikana 
+     * työssäolon ajalta työntekijälle maksettu tai maksettavaksi erääntynyt 
+     * palkka, hätätyöstä ja lain tai sopimuksen mukaisesta ylityöstä peruspalkan 
+     * lisäksi maksettavaa korotusta lukuun ottamatta, jaetaan lomanmääräytymisvuoden 
+     * aikana tehtyjen työpäivien määrällä, johon lisätään laissa säädetyn 
+     * vuorokautisen säännöllisen työajan tai, jos laissa ei ole säädetty säännöllisen 
+     * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
+     * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
      */
     @Test
     public void testaaViikottaisienTyopaivienMaaraJaettunaViidella() {
-        // ei koske testitapauksia
+        assertEquals("Työpäivät ja kahdeksasosa ylitöistä testitapaus C",
+                new BigDecimal(1),
+                vlplC.getViikottaisienTyopaivienMaaraJaettunaViidella()
+                        .setScale(0, RoundingMode.HALF_UP));
     }
 
 
     /**
-     * 
+     * Vuosilomalaki 11§
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden aikana 
+     * työssäolon ajalta työntekijälle maksettu tai maksettavaksi erääntynyt 
+     * palkka, hätätyöstä ja lain tai sopimuksen mukaisesta ylityöstä peruspalkan 
+     * lisäksi maksettavaa korotusta lukuun ottamatta, jaetaan lomanmääräytymisvuoden 
+     * aikana tehtyjen työpäivien määrällä, johon lisätään laissa säädetyn 
+     * vuorokautisen säännöllisen työajan tai, jos laissa ei ole säädetty säännöllisen 
+     * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
+     * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
      */
     @Test
     public void testaaKeskimaarainenPaivapalkka() {
-        // ei koske testitapauksia
+        assertEquals("Keskimääräinen päiväpalkka testitapaus C",
+                new BigDecimal("71.15"), vlplC.getKeskimaarainenPaivapalkka()
+                        .setScale(2, RoundingMode.HALF_UP));
     }
 
 
     /**
-     * 
+     * Vuosilomalaki 11§
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden aikana 
+     * työssäolon ajalta työntekijälle maksettu tai maksettavaksi erääntynyt 
+     * palkka, hätätyöstä ja lain tai sopimuksen mukaisesta ylityöstä peruspalkan 
+     * lisäksi maksettavaa korotusta lukuun ottamatta, jaetaan lomanmääräytymisvuoden 
+     * aikana tehtyjen työpäivien määrällä, johon lisätään laissa säädetyn 
+     * vuorokautisen säännöllisen työajan tai, jos laissa ei ole säädetty säännöllisen 
+     * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
+     * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
      */
     @Test
     public void testaaVuosilomalainMukainenKerroin() {
-        // ei koske testitapauksia
+        assertEquals("Vuosilomalain mukainen kerroin testitapaus C",
+                new BigDecimal("23.2"),
+                vlplC.getTuntipalkkaisenLomapalkkaKerroin().setScale(1,
+                        RoundingMode.HALF_UP));
+    }
+
+
+    /**
+     * Vuosilomalaki 10§
+     * Työntekijällä, jonka palkka on sovittu viikolta tai sitä pidemmältä 
+     * ajalta, on oikeus saada tämä palkkansa myös vuosiloman ajalta. Jos 
+     * työntekijälle on lomanmääräytymisvuoden aikana työssäolon ajalta 
+     * viikko- tai kuukausipalkan lisäksi maksettu tai erääntynyt 
+     * maksettavaksi muuta palkkaa, joka ei määräydy tilapäisten olosuhteiden 
+     * perusteella, tämän palkan osuus lasketaan vuosilomapalkkaan siten 
+     * kuin 11 §:n 1 ja 2 momentissa säädetään.
+     */
+    @Test
+    public void testaaViikkopalkka() {
+        assertEquals("Viikkopalkka loman alkaessa testitapaus D",
+                new BigDecimal("412.5"), vlplD.getViikkoPalkka());
+    }
+
+
+    /**
+     * Vuosilomalaki 10§
+     * Työntekijällä, jonka palkka on sovittu viikolta tai sitä pidemmältä 
+     * ajalta, on oikeus saada tämä palkkansa myös vuosiloman ajalta. Jos 
+     * työntekijälle on lomanmääräytymisvuoden aikana työssäolon ajalta 
+     * viikko- tai kuukausipalkan lisäksi maksettu tai erääntynyt 
+     * maksettavaksi muuta palkkaa, joka ei määräydy tilapäisten olosuhteiden 
+     * perusteella, tämän palkan osuus lasketaan vuosilomapalkkaan siten 
+     * kuin 11 §:n 1 ja 2 momentissa säädetään.
+     */
+    @Test
+    public void testaaBonuksienSuuruus() {
+        assertEquals("Bonuksien suuruus testitapaus D",
+                new BigDecimal("1013.00"), vlplD.getBonukset());
     }
 
 
@@ -240,6 +355,8 @@ public class TestVuosilomaLaskelma {
                 vlplA.getKorvausProsentti());
         assertEquals("korvausprosentti, testitapaus B", new BigDecimal("0.125"),
                 vlplB.getKorvausProsentti());
+        assertEquals("korvausprosentti, testitapaus D", new BigDecimal("0.125"),
+                vlplD.getKorvausProsentti());
     }
 
 
@@ -250,8 +367,12 @@ public class TestVuosilomaLaskelma {
     public void testaaLomapalkka() {
         assertEquals("Lomapalkka testitapaus A", new BigDecimal("2067.14"),
                 vlplA.getLomaPalkka());
-        assertEquals("Lomapalkka testitapaus A", new BigDecimal("2106.94"),
+        assertEquals("Lomapalkka testitapaus B", new BigDecimal("2106.94"),
                 vlplB.getLomaPalkka());
+        assertEquals("Lomapalkka testitapaus C", new BigDecimal("1650.63"),
+                vlplC.getLomaPalkka());
+        assertEquals("Lomapalkka testitapaus D", new BigDecimal("2189.13"),
+                vlplD.getLomaPalkka());
     }
 
 

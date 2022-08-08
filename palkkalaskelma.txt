@@ -1,0 +1,16 @@
+Viikkopalkkaperusteinen lomapalkka
+
+Viikkopalkka loman alkaessa
+	412.50 €
+
+Lomapäivien lukumäärä
+	28
+
+Muu palkka
+	1013.00 €
+
+Korvausprosentti
+	0.125 %
+
+Lomapalkka
+	 412.50 / 5 * 28 + 1013.00 * 0.125 = 2436.63

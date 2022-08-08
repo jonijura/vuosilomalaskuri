@@ -41,7 +41,8 @@ public class TestVuosilomaLaskuri {
     public void testaaLomaPaivienLaskeminen() {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
-        TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th);
+        TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
+                new BigDecimal("37.5"));
         var vle = new VuosilomaEhdot();
         var vll = new VuosilomaLaskuri(tst, vle);
 
@@ -55,7 +56,7 @@ public class TestVuosilomaLaskuri {
         lomaPaivia = vll.laskeLomapaivat(2009);
         assertEquals(lomaPaivia, 6);
         lomaPaivia = vll.laskeLomapaivat(2010);
-        assertEquals(lomaPaivia, 25);
+        assertEquals(lomaPaivia, 28);
     }
 
 
