@@ -26,7 +26,7 @@ public class Main {
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
                 new BigDecimal("37.5"));
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
-        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.Prosenttiperusteinen);
+        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.ViikkoPalkka);
 
         var vle = new VuosilomaEhdot();
         vle.setLomapalkkaKerroinAlleVuosi(new BigDecimal("0.1"));

@@ -6,6 +6,7 @@ package vuosilomaLaskuriTest;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -120,12 +121,24 @@ public class TestVuosilomaLaskelma {
 
 
     /**
-     * 
+     * Vuosilomalaki 5§
+     * Työntekijällä on oikeus saada lomaa kaksi ja puoli arkipäivää 
+     * kultakin täydeltä lomanmääräytymiskuukaudelta. Jos työsuhde on 
+     * lomanmääräytymisvuoden loppuun mennessä jatkunut yhdenjaksoisesti 
+     * alle vuoden, työntekijällä on kuitenkin oikeus saada lomaa kaksi 
+     * arkipäivää kultakin täydeltä lomanmääräytymiskuukaudelta. Loman pituutta 
+     * laskettaessa päivän osa pyöristetään täyteen lomapäivään.
      */
     @Test
     public void testaaLomapaivienLkm() {
-        // testaa kerroin
-        // testaa taysien kk lkm
+        assertEquals("Lomapäiväkerroin testitapaus A", new BigDecimal("2.5"),
+                vlplA.getLomaPaivaKerroin());
+        assertEquals("Lomapäiväkerroin testitapaus B", new BigDecimal("2.5"),
+                vlplB.getLomaPaivaKerroin());
+        assertEquals("Lomapäivien lukumäärä testitapaus A", 25,
+                vlplA.getLomapaivienLkm());
+        assertEquals("Lomapäivien lukumäärä testitapaus B", 25,
+                vlplB.getLomapaivienLkm());
     }
 
 
@@ -136,6 +149,7 @@ public class TestVuosilomaLaskelma {
     public void testaaTyoPaivienLkm() {
         // tyopaivia
         // tyonveroisiaPaivia
+        // ei koske testitapauksia
     }
 
 
@@ -144,7 +158,7 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaYlitoidenJaHatatoidenLkm() {
-        //
+        // ei koske testitapauksia
     }
 
 
@@ -153,7 +167,7 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaYhdisttyTyopaivatJaHatatyot() {
-        //
+        // ei koske testitapauksia
     }
 
 
@@ -162,7 +176,7 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaViikottaisienTyopaivienMaaraJaettunaViidella() {
-        //
+        // ei koske testitapauksia
     }
 
 
@@ -171,7 +185,7 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaKeskimaarainenPaivapalkka() {
-        //
+        // ei koske testitapauksia
     }
 
 
@@ -180,16 +194,52 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaVuosilomalainMukainenKerroin() {
-        //
+        // ei koske testitapauksia
     }
 
 
     /**
-     * 
+     * Vuosilomalaki 12§
+     * Jos työntekijä on lomanmääräytymisvuoden aikana ollut 
+     * estynyt tekemästä työtä 7 §:n 2 momentin 1–4 tai 7 kohdassa 
+     * tarkoitetusta syystä, vuosilomapalkan perusteena olevaan palkkaan 
+     * lisätään laskennallisesti poissaoloajalta saamatta jäänyt palkka 
+     * enintään 7 §:n 3 momentissa säädetyltä ajalta. Poissaoloajan palkka 
+     * lasketaan, jollei muusta ole sovittu, työntekijän keskimääräisen 
+     * viikkotyöajan ja poissaolon alkamishetken palkan mukaan ottaen 
+     * huomioon poissaoloaikana toteutetut palkankorotukset. Jos keskimääräisestä 
+     * viikkotyöajasta ei ole sovittu, laskennallinen palkka määräytyy poissaoloa 
+     * edeltävän 12 viikon keskimääräisen viikkotyöajan mukaan.
      */
     @Test
     public void testaaTyossaolonVeroiseltaAjaltaSaamattaJaanytPalkka() {
-        //
+        assertEquals(
+                "testitapaus A laskennallinen palkka työssäolon veroiselta ajalta",
+                new BigDecimal("1579.14"),
+                vlplA.getTyossaOlonVeroisenAjanPalkka().setScale(2,
+                        RoundingMode.HALF_UP));
+        assertEquals(
+                "testitapaus B laskennallinen palkka työssäolon veroiselta ajalta",
+                new BigDecimal("1897.50"),
+                vlplB.getTyossaOlonVeroisenAjanPalkka().setScale(2,
+                        RoundingMode.HALF_UP));
+    }
+
+
+    /**
+     * TES 20§8)
+     * Lomapalkka tai -korvaus on sekä tuntipalkkaisella että suhteutettua kuukausipalkkaa 
+     * saavalla jäljempänä esitetystä lomanmääräytymisvuoden ansiosta:
+     * • 10 % työsuhteen kestettyä lomanmääräytymisvuoden loppuun (31.3.) mennessä alle vuoden
+     * • 12,5 % työsuhteen kestettyä lomanmääräytymisvuoden loppuun (31.3.)
+     * mennessä vähintään vuoden.
+     */
+    @Test
+    public void testaaKorvausProsentti() {
+        assertEquals("korvausprosentti, testitapaus A", new BigDecimal("0.125"),
+                vlplA.getKorvausProsentti());
+        assertEquals("korvausprosentti, testitapaus B", new BigDecimal("0.125"),
+                vlplB.getKorvausProsentti());
     }
 
 
@@ -197,8 +247,11 @@ public class TestVuosilomaLaskelma {
      * 
      */
     @Test
-    public void testaaKorvausProsentti() {
-        //
+    public void testaaLomapalkka() {
+        assertEquals("Lomapalkka testitapaus A", new BigDecimal("2067.14"),
+                vlplA.getLomaPalkka());
+        assertEquals("Lomapalkka testitapaus A", new BigDecimal("2106.94"),
+                vlplB.getLomaPalkka());
     }
 
 

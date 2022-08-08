@@ -62,7 +62,7 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
     /**
      * @return
      */
-    public BigDecimal getTyoTunnit() {
+    public BigDecimal getTehdytTunnit() {
         BigDecimal tunteja = BigDecimal.ZERO;
         for (var tp : historia) {
             tunteja = tunteja.add(tp.getTehdytTunnit());
@@ -113,7 +113,7 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
     /**
      * @return
      */
-    public BigDecimal getTehdytTunnit() {
+    public BigDecimal getTyoAika() {
         BigDecimal tunteja = BigDecimal.ZERO;
         for (var tp : historia) {
             tunteja = tunteja.add(tp.getTyoAika());

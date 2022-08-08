@@ -68,7 +68,7 @@ public class TestTyoHistoria {
         var th = new TyoHistoria(testikk);
         assertEquals(new BigDecimal("682.50"), th.getPalkka());
         assertEquals(new BigDecimal("682.50"),
-                th.getTyoTunnit().multiply(new BigDecimal(10)));
+                th.getTehdytTunnit().multiply(new BigDecimal(10)));
     }
 
 

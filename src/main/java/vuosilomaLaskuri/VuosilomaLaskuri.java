@@ -115,12 +115,26 @@ public class VuosilomaLaskuri {
      * lomanmääräytymisvuoden päättymisen jälkeen ennen vuosiloman tai sen osan alkamista, 
      * lomapalkka lasketaan lomanmääräytymisvuoden aikaisen työajan perusteella määräytyvän 
      * viikko- tai kuukausipalkan mukaan.
+     * 
+     * TES 20§6) Vuosilomapäivän palkka saadaan kuukausipalkasta jakajalla 25.
+     * Lomapalkka provision osalta lasketaan vuosilomalain mukaan.
+     * Jos työntekijän työaika ja vastaavasti palkka on muuttunut lomanmääräytymisvuoden 
+     * aikana ja hän on kuukausipalkkainen lomanmääräytymisvuoden lopussa
+     * (31.3.), hänen lomapalkkansa lasketaan tämän pykälän 8.–11. kohdan mukaan.
+     * 
+     * 8.-11. vastaa vuosilomalain prosenttiperusteista lomapalkkaa.
      */
     public BigDecimal laskeLomaPalkka(int vuosi) {
-        if (tyoSuhdeTiedot.onkoProsenttiperusteinenLomapalkka()) {
+        switch (tyoSuhdeTiedot.getLomapalkanLaskutapa()) {
+        case Prosenttiperusteinen:
             return prosenttiperusteinenLomapalkka(vuosi);
+        case ViikkoPalkka:
+            return viikkoPalkkaperusteinenLomapalkka(vuosi);
+        default:
+            throw new RuntimeException("lomapalkan laskutapaa "
+                    + tyoSuhdeTiedot.getLomapalkanLaskutapa()
+                    + " ei ole toteutettu!");
         }
-        return viikkoPalkkaperusteinenLomapalkka(vuosi);
     }
 
 
@@ -225,8 +239,8 @@ public class VuosilomaLaskuri {
     public VuosilomaPalkkalaskelma laskePalkkalaskelma(int vuosi) {
         this.vuosilomaPalkkalaskelma = new VuosilomaPalkkalaskelma();
         vuosilomaPalkkalaskelma.setTyosuhdeTiedot(tyoSuhdeTiedot);
-        laskeLomapaivat(vuosi);
-        laskeLomaPalkka(vuosi);
+        vuosilomaPalkkalaskelma.setLomaPaivat(laskeLomapaivat(vuosi));
+        vuosilomaPalkkalaskelma.setLomaPalkka(laskeLomaPalkka(vuosi));
         return vuosilomaPalkkalaskelma;
     }
 }

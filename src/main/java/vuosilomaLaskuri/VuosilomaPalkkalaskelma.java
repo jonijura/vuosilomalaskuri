@@ -58,6 +58,16 @@ public class VuosilomaPalkkalaskelma {
     private TyosuhdeTiedotIF tyoSuhdeTiedot;
 
     /**
+     * 
+     */
+    private BigDecimal lomaPalkka;
+
+    /**
+     * 
+     */
+    private int lomaPaivia;
+
+    /**
      * @return
      */
     public BigDecimal getLomaVuodenAnsiot() {
@@ -130,6 +140,22 @@ public class VuosilomaPalkkalaskelma {
 
 
     /**
+     * @return
+     */
+    public int getLomapaivienLkm() {
+        return lomaPaivia;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getLomaPalkka() {
+        return lomaPalkka;
+    }
+
+
+    /**
      * @param lomaVuodenAnsiot
      */
     public void setLomaVuodenAnsiot(BigDecimal lomaVuodenAnsiot) {
@@ -194,6 +220,22 @@ public class VuosilomaPalkkalaskelma {
     }
 
 
+    /**
+     * @param lomaPalkka
+     */
+    public void setLomaPalkka(BigDecimal lomaPalkka) {
+        this.lomaPalkka = lomaPalkka.setScale(2, RoundingMode.HALF_UP);
+    }
+
+
+    /**
+     * @param lomaPaivienLkm
+     */
+    public void setLomaPaivat(int lomaPaivienLkm) {
+        lomaPaivia = lomaPaivienLkm;
+    }
+
+
     @Override
     public String toString() {
         switch (tyoSuhdeTiedot.getLomapalkanLaskutapa()) {
@@ -212,14 +254,8 @@ public class VuosilomaPalkkalaskelma {
                     + lomaVuodenAnsiot.setScale(2, RoundingMode.HALF_UP) + " + "
                     + tyossaOlonVeroisenAjanPalkka.setScale(2,
                             RoundingMode.HALF_UP)
-                    + " ) * " + korvausProsentti + " = "
-                    + (lomaVuodenAnsiot.add(tyossaOlonVeroisenAjanPalkka))
-                            .multiply(korvausProsentti)
-                            .setScale(2, RoundingMode.HALF_UP);
+                    + " ) * " + korvausProsentti + " = " + lomaPalkka;
         case ViikkoPalkka:
-            int lomaPaivia = (int) Math
-                    .round(lomaPaivaKerroin.doubleValue() * taysiaTyoKuukausia
-                            + 0.001);
             return "Viikkopalkkaperusteinen lomapalkka\r\n\r\n"
                     + "Viikkopalkka loman alkaessa\r\n" + "\t"
                     + viikkoPalkka.setScale(2, RoundingMode.HALF_UP)
@@ -230,11 +266,7 @@ public class VuosilomaPalkkalaskelma {
                     + " %\r\n\r\n" + "Lomapalkka\r\n" + "\t "
                     + viikkoPalkka.setScale(2, RoundingMode.HALF_UP) + " / 5 * "
                     + lomaPaivia + " + " + bonukset + " * " + korvausProsentti
-                    + " = "
-                    + ((viikkoPalkka.multiply(new BigDecimal(lomaPaivia))
-                            .multiply(new BigDecimal("0.2")))
-                                    .add(bonukset.multiply(korvausProsentti)))
-                                            .setScale(2, RoundingMode.HALF_UP);
+                    + " = " + lomaPalkka;
         default:
             return "";
         }

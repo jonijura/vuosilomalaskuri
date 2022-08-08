@@ -220,24 +220,9 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
 
     @Override
-    public boolean onko14pvKuukaudessa() {
-        return ansaintaSaanto == AnsaintaSaanto.Yli14PvKuukaudessa;
-    }
-
-
-    @Override
     public boolean onkoSopimusKestanytYliVuoden(LocalDate pvm) {
         LocalDate vuosiSitten = pvm.minusYears(1);
         return sopimuksenAlkuPv.isBefore(vuosiSitten);
-    }
-
-
-    /**
-     * @return
-     */
-    @Override
-    public boolean onkoProsenttiperusteinenLomapalkka() {
-        return lomapalkanLaskutapa == LomapalkanLaskutapa.Prosenttiperusteinen;
     }
 
 
@@ -264,10 +249,10 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         TyoHistoria kuunTyoHistoria = getKuukaudenMerkinnat(kuukausi);
         int tyonVeroisiaPaivia = VuosilomaLaki
                 .tyonVeroisiaPaivia(kuunTyoHistoria);
-        if (onko14pvKuukaudessa()) {
+        if (ansaintaSaanto == AnsaintaSaanto.Yli14PvKuukaudessa) {
             return tyonVeroisiaPaivia >= 14;
         }
-        return kuunTyoHistoria.getTyoTunnit()
+        return kuunTyoHistoria.getTehdytTunnit()
                 .compareTo(new BigDecimal(35)) >= 0;
     }
 
@@ -310,7 +295,7 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
                 .minusDays(12 * 7 - 1);
         BigDecimal keskimaarainenViikkoTyoAika = getValinMerkinnat(
                 keskiTyoAjanLaskuValiAlku, keskiTyoAjanLaskuValiLoppu)
-                        .getTehdytTunnit()
+                        .getTyoAika()
                         .divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
         return paivia.multiply(keskimaarainenViikkoTyoAika)
                 .multiply(new BigDecimal("0.2"))

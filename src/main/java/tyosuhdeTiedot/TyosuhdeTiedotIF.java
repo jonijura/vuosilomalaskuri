@@ -17,18 +17,6 @@ import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
 public interface TyosuhdeTiedotIF {
 
     /**
-     * @return
-     */
-    public boolean onko14pvKuukaudessa();
-
-
-    /**
-     * @return
-     */
-    public boolean onkoProsenttiperusteinenLomapalkka();
-
-
-    /**
      * @param pvm 
      * @return
      */

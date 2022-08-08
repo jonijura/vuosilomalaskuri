@@ -26,6 +26,6 @@ public class TestTiedostonKasittelija {
     public void testaaTyoPaivienLukeminen() {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
-        assertEquals(new BigDecimal("1668.25"), th.getTyoTunnit());
+        assertEquals(new BigDecimal("1668.25"), th.getTehdytTunnit());
     }
 }
