@@ -154,8 +154,6 @@ public class VuosilomaLaskuri {
                 .getLomapalkkaKerroin(sopimuksenKestoYliVuoden);
         BigDecimal viikkoTyoAika = tyoSuhdeTiedot.getViikkotyoAika();
         vuosilomaPalkkalaskelma
-                .setPalkkaLaskelmanTyyppi("Viikkopalkkaperusteinen lomapalkka");
-        vuosilomaPalkkalaskelma
                 .setViikkopalkka(viikkoTyoAika.multiply(tuntiPalkka));
         vuosilomaPalkkalaskelma.setKorvausProsentti(lomapalkkaKerroin);
         vuosilomaPalkkalaskelma.setBonukset(bonukset);
@@ -211,8 +209,6 @@ public class VuosilomaLaskuri {
                 .onkoSopimusKestanytYliVuoden(lomakaudenViimeinenPaiva);
         BigDecimal lomapalkkaKerroin = vuosilomaEhdot
                 .getLomapalkkaKerroin(sopimuksenKestoYliVuoden);
-        vuosilomaPalkkalaskelma
-                .setPalkkaLaskelmanTyyppi("Prosenttiperusteinen lomapalkka");
         vuosilomaPalkkalaskelma.setKorvausProsentti(lomapalkkaKerroin);
         vuosilomaPalkkalaskelma
                 .setLomaVuodenAnsiot(kaudenTyossaoloPalkka.add(bonukset));

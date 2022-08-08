@@ -20,11 +20,6 @@ public class VuosilomaPalkkalaskelma {
     /**
      * 
      */
-    private String palkkaLaskelmanTyyppi;
-
-    /**
-     * 
-     */
     private BigDecimal lomaVuodenAnsiot = BigDecimal.ZERO;
 
     /**
@@ -135,14 +130,6 @@ public class VuosilomaPalkkalaskelma {
 
 
     /**
-     * @param palkkaLaskelmanTyyppi
-     */
-    public void setPalkkaLaskelmanTyyppi(String palkkaLaskelmanTyyppi) {
-        this.palkkaLaskelmanTyyppi = palkkaLaskelmanTyyppi;
-    }
-
-
-    /**
      * @param lomaVuodenAnsiot
      */
     public void setLomaVuodenAnsiot(BigDecimal lomaVuodenAnsiot) {
@@ -209,8 +196,8 @@ public class VuosilomaPalkkalaskelma {
 
     @Override
     public String toString() {
-        switch (palkkaLaskelmanTyyppi) {
-        case "Prosenttiperusteinen lomapalkka":
+        switch (tyoSuhdeTiedot.getLomapalkanLaskutapa()) {
+        case Prosenttiperusteinen:
             return "Prosenttiperusteinen lomapalkka\r\n\r\n"
                     + "Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja hätätöiden korotusosia\r\n"
                     + "\t" + lomaVuodenAnsiot.setScale(2, RoundingMode.HALF_UP)
@@ -229,7 +216,7 @@ public class VuosilomaPalkkalaskelma {
                     + (lomaVuodenAnsiot.add(tyossaOlonVeroisenAjanPalkka))
                             .multiply(korvausProsentti)
                             .setScale(2, RoundingMode.HALF_UP);
-        case "Viikkopalkkaperusteinen lomapalkka":
+        case ViikkoPalkka:
             int lomaPaivia = (int) Math
                     .round(lomaPaivaKerroin.doubleValue() * taysiaTyoKuukausia
                             + 0.001);

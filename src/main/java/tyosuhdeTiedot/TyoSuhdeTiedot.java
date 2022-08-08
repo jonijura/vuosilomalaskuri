@@ -106,7 +106,7 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
 
     /**
-     * 
+     * Katsotaan, onko työpäivien lukumäärä ollut keskimäärin yli 14 kuukaudessa.
      */
     private void selvitaAnsaintaSaanto() {
         long kuukausia = tyoHistoria.kestoKuukausina();
