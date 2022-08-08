@@ -121,6 +121,37 @@ public class TestTyosuhdeTiedot {
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         boolean b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
         assertEquals(false, b);
+
+        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
+        b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
+        assertEquals(true, b);
+    }
+
+
+    /**
+     * Vuosilomalaki 7§ loppu
+     * 
+     * Työssäolon veroisiksi tunneiksi lasketaan ne tunnit, 
+     * jotka työntekijä sopimuksen mukaan ilman poissaoloa olisi ollut työssä. (18.3.2016/182)
+     */
+    @Test
+    public void testaaTyossaolonVeroisetTunnitLomanmaarittelyKuukauksissa() {
+        String[] testikk = new String[] { "10.8.2009|vanhempainvapaa|",
+                "11.8.2009|vanhempainvapaa|", "12.8.2009|vanhempainvapaa|",
+                "13.8.2009|vanhempainvapaa|",
+                "14.8.2009|||9-16:30|7,5|7,5|7,5|" };
+
+        TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
+                new TyoHistoria(testikk), new BigDecimal("0"));
+        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
+        boolean b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
+        assertEquals("nollatuntisopimus", false, b);
+
+        tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
+                new TyoHistoria(testikk), new BigDecimal("37.5"));
+        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
+        b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
+        assertEquals("sovittu viikkotyöaika", true, b);
     }
 
 

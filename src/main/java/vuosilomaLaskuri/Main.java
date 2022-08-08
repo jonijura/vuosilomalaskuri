@@ -26,7 +26,7 @@ public class Main {
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
                 new BigDecimal("37.5"));
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
-        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.ViikkoPalkka);
+        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.TuntiPalkka);
 
         var vle = new VuosilomaEhdot();
         vle.setLomapalkkaKerroinAlleVuosi(new BigDecimal("0.1"));
@@ -36,5 +36,6 @@ public class Main {
         var tulos = vll.laskePalkkalaskelma(2010);
         TiedostonKasittelija.tallenna(tulos.toString(), "palkkalaskelma.txt");
         System.out.println(tulos.toString());
+        System.out.println(tulos.getLomaPalkka());
     }
 }

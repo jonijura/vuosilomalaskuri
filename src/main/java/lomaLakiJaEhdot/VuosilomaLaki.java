@@ -79,6 +79,25 @@ public class VuosilomaLaki {
     protected BigDecimal lomapalkkaKerroinYliVuosi = new BigDecimal("0.115");
 
     /**
+     * vuosilomalaki 11§
+     */
+    protected BigDecimal[] tuntipalkkaistenLomapalkkakertoimet = {
+            BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("1.8"),
+            new BigDecimal("2.7"), new BigDecimal("3.6"), new BigDecimal("4.5"),
+            new BigDecimal("5.4"), new BigDecimal("6.3"), new BigDecimal("7.2"),
+            new BigDecimal("8.1"), new BigDecimal("9.0"), new BigDecimal("9.9"),
+            new BigDecimal("10.8"), new BigDecimal("11.8"),
+            new BigDecimal("12.7"), new BigDecimal("13.6"),
+            new BigDecimal("14.5"), new BigDecimal("15.5"),
+            new BigDecimal("16.4"), new BigDecimal("17.4"),
+            new BigDecimal("18.3"), new BigDecimal("19.3"),
+            new BigDecimal("20.3"), new BigDecimal("21.3"),
+            new BigDecimal("22.2"), new BigDecimal("23.2"),
+            new BigDecimal("24.1"), new BigDecimal("25.0"),
+            new BigDecimal("25.9"), new BigDecimal("26.9"),
+            new BigDecimal("27.8") };
+
+    /**
      * @param sopimuksenKestoYliVuoden
      * @return
      */
@@ -162,6 +181,21 @@ public class VuosilomaLaki {
             if (syy.equals(tyyppi))
                 return true;
         return false;
+    }
+
+
+    /**
+     * Vuosilomalaki 11§ taulukko
+     * Jos lomapäivien määrä on suurempi kuin 30, kerrointa korotetaan luvulla 0,9 lomapäivää kohden.
+     * @param lomaPaivia
+     * @return
+     */
+    public BigDecimal getTuntipalkkaisenLomapalkkaKerroin(int lomaPaivia) {
+        if (lomaPaivia >= tuntipalkkaistenLomapalkkakertoimet.length)
+            return tuntipalkkaistenLomapalkkakertoimet[30].add(
+                    new BigDecimal("0.9").multiply(new BigDecimal(lomaPaivia
+                            - tuntipalkkaistenLomapalkkakertoimet.length + 1)));
+        return tuntipalkkaistenLomapalkkakertoimet[lomaPaivia];
     }
 
 }

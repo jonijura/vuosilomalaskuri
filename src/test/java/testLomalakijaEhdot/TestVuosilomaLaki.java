@@ -5,6 +5,8 @@ package testLomalakijaEhdot;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
 
 import lomaLakiJaEhdot.VuosilomaLaki;
@@ -94,5 +96,19 @@ public class TestVuosilomaLaki {
                 "29.8.2009|||9-15:15|6,25|6,25|6,25|" };
         th = new TyoHistoria(testikk);
         assertEquals(15, VuosilomaLaki.tyonVeroisiaPaivia(th));
+    }
+
+
+    /**
+     * Vuosilomalaki 11§ taulukko,
+     * Jos lomapäivien määrä on suurempi kuin 30, kerrointa korotetaan luvulla 0,9 lomapäivää kohden.
+     */
+    @Test
+    public void testaaTuntipalkkaisenLomapalkkaKerroin() {
+        var vll = new VuosilomaLaki();
+        assertEquals(new BigDecimal("22.2"),
+                vll.getTuntipalkkaisenLomapalkkaKerroin(24));
+        assertEquals(new BigDecimal("29.6"),
+                vll.getTuntipalkkaisenLomapalkkaKerroin(32));
     }
 }

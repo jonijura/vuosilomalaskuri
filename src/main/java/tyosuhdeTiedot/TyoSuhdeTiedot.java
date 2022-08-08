@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
+import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import lomaLakiJaEhdot.VuosilomaLaki;
 
 /**
@@ -55,7 +56,11 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         /**
          * 
          */
-        ViikkoPalkka
+        ViikkoPalkka,
+        /**
+         * 
+         */
+        TuntiPalkka
     }
 
     /**
@@ -77,6 +82,11 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      * 
      */
     private BigDecimal viikkoTyoAika;
+
+    /**
+     * 
+     */
+    private int tyoPaiviaViikossa = 5;
 
     /**
      * @param sopimuksenAlkuPv2 
@@ -176,6 +186,15 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     }
 
 
+    @Override
+    public BigDecimal getValinPalkka(LocalDate alku, LocalDate loppu,
+            TyoMerkinnanTyyppi tyyppi) {
+        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
+                loppu, tyyppi);
+        return valinTyoHistoria.getPalkka();
+    }
+
+
     /**
      * @param alku
      * @param loppu
@@ -252,8 +271,22 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         if (ansaintaSaanto == AnsaintaSaanto.Yli14PvKuukaudessa) {
             return tyonVeroisiaPaivia >= 14;
         }
-        return kuunTyoHistoria.getTehdytTunnit()
-                .compareTo(new BigDecimal(35)) >= 0;
+        BigDecimal tyossaolonVeroisetVapaapaivat = new BigDecimal(
+                tyonVeroisiaPaivia - tyoHistoria.getTyoPaivienLkm());
+        BigDecimal tyossaOlonVeroisiaTunteja = kuunTyoHistoria.getTyoAika()
+                .add(tyossaolonVeroisetVapaapaivat
+                        .multiply(sopimuksenMukainenPaivatyoaika()));
+        return tyossaOlonVeroisiaTunteja.compareTo(new BigDecimal(35)) >= 0;
+    }
+
+
+    /**
+     * @return
+     */
+    private BigDecimal sopimuksenMukainenPaivatyoaika() {
+        if (viikkoTyoAika == null)
+            return BigDecimal.ZERO;
+        return viikkoTyoAika.multiply(new BigDecimal("0.2"));
     }
 
 
@@ -311,6 +344,35 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     public BigDecimal viimeisinTuntipalkka(LocalDate paiva) {
         return new BigDecimal(
                 paiva.isBefore(LocalDate.of(2009, 10, 15)) ? 10 : 11);
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    public BigDecimal getValinTyopaivienLkm(LocalDate alku, LocalDate loppu) {
+        return new BigDecimal(
+                tyoHistoria.getValinMerkinnat(alku, loppu).getTyoPaivienLkm());
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    public BigDecimal getValinTuntienLkm(LocalDate alku, LocalDate loppu,
+            TyoMerkinnanTyyppi tyyppi) {
+        return tyoHistoria.getValinTuntienLkm(alku, loppu, tyyppi);
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    public BigDecimal getTyopaiviaViikossa() {
+        return new BigDecimal(tyoPaiviaViikossa);
     }
 
 }

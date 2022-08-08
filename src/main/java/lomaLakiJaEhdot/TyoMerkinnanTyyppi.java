@@ -29,7 +29,15 @@ public enum TyoMerkinnanTyyppi {
     /**
      * 
      */
-    tasausPaiva;
+    tasausPaiva,
+    /**
+     * 
+     */
+    hatatyo,
+    /**
+     * 
+     */
+    ylityo;
 
     /**
      * @param arvo
@@ -49,6 +57,8 @@ public enum TyoMerkinnanTyyppi {
             return tavallinenTyopaiva;
         case "tasausPaiva":
             return tasausPaiva;
+        case "hätätyö":
+            return hatatyo;
         default:
             throw new RuntimeException("tuntematon työmerkinnän tyyppi");
         }

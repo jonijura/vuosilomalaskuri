@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
+import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import lomaLakiJaEhdot.VuosilomaEhdot;
 import lomaLakiJaEhdot.VuosilomaLaki;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
@@ -64,9 +65,9 @@ public class VuosilomaLaskuri {
      */
     public int laskeLomapaivat(int vuosi) {
         LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
-        LocalDate[] maaraytymisKk = lomaVuodenKuukaudet(vuosi);
+        LocalDate[] lomavuodenKuukaudet = lomaVuodenKuukaudet(vuosi);
         int lomanMaaraytymiskk = 0;
-        for (var kk : maaraytymisKk)
+        for (var kk : lomavuodenKuukaudet)
             if (tyoSuhdeTiedot.onkoTaysiLomanMaaraytymisiKK(kk))
                 lomanMaaraytymiskk++;
         boolean sopimuksenKestoYliVuoden = tyoSuhdeTiedot
@@ -130,11 +131,69 @@ public class VuosilomaLaskuri {
             return prosenttiperusteinenLomapalkka(vuosi);
         case ViikkoPalkka:
             return viikkoPalkkaperusteinenLomapalkka(vuosi);
+        case TuntiPalkka:
+            return tuntiPalkkaperusteinenLomapalkka(vuosi);
         default:
             throw new RuntimeException("lomapalkan laskutapaa "
                     + tyoSuhdeTiedot.getLomapalkanLaskutapa()
                     + " ei ole toteutettu!");
         }
+    }
+
+
+    /**
+     * 11 §
+     * Keskipäiväpalkkaan perustuva vuosilomapalkka
+     * Muun kuin viikko- tai kuukausipalkalla työskentelevän 
+     * sellaisen työntekijän vuosilomapalkka, joka sopimuksen 
+     * mukaan työskentelee vähintään 14 päivänä kalenterikuukaudessa, 
+     * lasketaan kertomalla hänen keskipäiväpalkkansa lomapäivien määrän 
+     * perusteella määräytyvällä kertoimella:
+     * 
+     * Keskipäiväpalkka lasketaan siten, että lomanmääräytymisvuoden 
+     * aikana työssäolon ajalta työntekijälle maksettu tai maksettavaksi 
+     * erääntynyt palkka, hätätyöstä ja lain tai sopimuksen mukaisesta 
+     * ylityöstä peruspalkan lisäksi maksettavaa korotusta lukuun ottamatta, 
+     * jaetaan lomanmääräytymisvuoden aikana tehtyjen työpäivien määrällä, 
+     * johon lisätään laissa säädetyn vuorokautisen säännöllisen työajan tai, 
+     * jos laissa ei ole säädetty säännöllisen vuorokautisen työajan enimmäismäärää, 
+     * sopimuksessa sovitun säännöllisen työajan lisäksi tehtyjen työtuntien kahdeksasosa.
+     * 
+     * Jos työntekijän viikoittaisten työpäivien määrä on sopimuksen mukaan pienempi tai 
+     * suurempi kuin viisi, keskipäiväpalkka kerrotaan viikoittaisten työpäivien määrällä 
+     * ja jaetaan viidellä.
+     * @param vuosi
+     * @return
+     */
+    private BigDecimal tuntiPalkkaperusteinenLomapalkka(int vuosi) {
+        LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
+        LocalDate lomakaudenEnsimmainenPaiva = LocalDate.of(vuosi - 1, 4, 1);
+        BigDecimal kerroin = vuosilomaEhdot
+                .getTuntipalkkaisenLomapalkkaKerroin(laskeLomapaivat(vuosi));
+        BigDecimal tyossaOloajanPalkka = tyoSuhdeTiedot.getValinPalkka(
+                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
+        BigDecimal hataToistaSaatuPalkka = tyoSuhdeTiedot.getValinPalkka(
+                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
+                TyoMerkinnanTyyppi.hatatyo);
+        BigDecimal ylitoistaSaatuPalkka = tyoSuhdeTiedot.getValinPalkka(
+                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
+                TyoMerkinnanTyyppi.ylityo);
+        BigDecimal tehtyjenTyopaivienMaara = tyoSuhdeTiedot
+                .getValinTyopaivienLkm(lomakaudenEnsimmainenPaiva,
+                        lomakaudenViimeinenPaiva);
+        BigDecimal ylityoTunteja = tyoSuhdeTiedot.getValinTuntienLkm(
+                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
+                TyoMerkinnanTyyppi.ylityo);
+        BigDecimal tyoPaiviaViikossa = tyoSuhdeTiedot.getTyopaiviaViikossa();
+        BigDecimal palkkaIlmanYliHata = tyossaOloajanPalkka
+                .subtract(hataToistaSaatuPalkka.add(ylitoistaSaatuPalkka));
+        BigDecimal laskennallisiaTyopaivia = tehtyjenTyopaivienMaara
+                .add(ylityoTunteja.multiply(new BigDecimal("0.125")));
+        BigDecimal keskimaarainenViikkotyoAika = tyoPaiviaViikossa
+                .multiply(new BigDecimal("0.2"));
+        return palkkaIlmanYliHata
+                .divide(laskennallisiaTyopaivia, 6, RoundingMode.HALF_UP)
+                .multiply(keskimaarainenViikkotyoAika).multiply(kerroin);
     }
 
 

@@ -6,6 +6,7 @@ package tyosuhdeTiedot;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
 
@@ -47,6 +48,16 @@ public interface TyosuhdeTiedotIF {
     /**
      * @param alku
      * @param loppu
+     * @param tyyppi 
+     * @return
+     */
+    public BigDecimal getValinPalkka(LocalDate alku, LocalDate loppu,
+            TyoMerkinnanTyyppi tyyppi);
+
+
+    /**
+     * @param alku
+     * @param loppu
      * @return
      */
     public BigDecimal getValinBonukset(LocalDate alku, LocalDate loppu);
@@ -62,10 +73,10 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
-     * @param lomakaudenViimeinenPaiva
+     * @param pvm
      * @return
      */
-    public BigDecimal viimeisinTuntipalkka(LocalDate lomakaudenViimeinenPaiva);
+    public BigDecimal viimeisinTuntipalkka(LocalDate pvm);
 
 
     /**
@@ -78,5 +89,29 @@ public interface TyosuhdeTiedotIF {
      * @return
      */
     public LomapalkanLaskutapa getLomapalkanLaskutapa();
+
+
+    /**
+     * @param alku
+     * @param loppu
+     * @return
+     */
+    public BigDecimal getValinTyopaivienLkm(LocalDate alku, LocalDate loppu);
+
+
+    /**
+     * @param alku
+     * @param loppu
+     * @param ylityo
+     * @return
+     */
+    public BigDecimal getValinTuntienLkm(LocalDate alku, LocalDate loppu,
+            TyoMerkinnanTyyppi ylityo);
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getTyopaiviaViikossa();
 
 }
