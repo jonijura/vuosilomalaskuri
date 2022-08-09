@@ -3,7 +3,6 @@ package lomaLakiJaEhdot;
 import java.math.BigDecimal;
 
 import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoPaivaMerkinta;
 
 /**
  * @author Joona1
@@ -120,12 +119,12 @@ public class VuosilomaLaki {
 
 
     /**
-     * @param merkinta
+     * @param tyyppi
      * @return
      */
-    public static boolean onkoTyonVeroinen(TyoPaivaMerkinta merkinta) {
+    private static boolean onkoTyonVeroinen(TyoMerkinnanTyyppi tyyppi) {
         for (var syy : tyossaOloPaivienVeroisia)
-            if (syy.equals(merkinta.getPaivanTyyppi()))
+            if (syy.equals(tyyppi))
                 return true;
         return false;
     }
@@ -154,7 +153,7 @@ public class VuosilomaLaki {
         int tasausPaivia = 0;
         var palaset = th.paloittelePaivanTyypinMukaan();
         for (var pala : palaset) {
-            if (VuosilomaLaki.onkoTyonVeroinen(pala.get(0)))
+            if (onkoTyonVeroinen(pala.merkintojenTyyppi()))
                 paivia += pala.merkintojenLkm();
             else if (pala
                     .merkintojenTyyppi() == TyoMerkinnanTyyppi.tasausPaiva) {

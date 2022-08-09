@@ -51,15 +51,6 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
 
 
     /**
-     * @param i
-     * @return
-     */
-    public TyoPaivaMerkinta get(int i) {
-        return historia.get(i);
-    }
-
-
-    /**
      * @return
      */
     public BigDecimal getTehdytTunnit() {
@@ -244,5 +235,23 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
             if (tp.getPaivanTyyppi() == TyoMerkinnanTyyppi.tavallinenTyopaiva)
                 tyoPaivia++;
         return tyoPaivia;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getTuntipalkka() {
+        if (historia.size() == 0)
+            return BigDecimal.ZERO;
+        return historia.get(0).getTuntipalkka();
+    }
+
+
+    /**
+     * @return
+     */
+    public LocalDate getAlkuPvm() {
+        return historia.get(0).getPvm();
     }
 }

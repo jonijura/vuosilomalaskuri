@@ -159,25 +159,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
 
     /**
-     * @param localDate
-     * @return
-     */
-    public TyoHistoria getKuukaudenMerkinnat(LocalDate localDate) {
-        return tyoHistoria.getKuukaudenMerkinnat(localDate);
-    }
-
-
-    /**
-     * @param alku 
-     * @param loppu
-     * @return
-     */
-    private TyoHistoria getValinMerkinnat(LocalDate alku, LocalDate loppu) {
-        return tyoHistoria.getValinMerkinnat(alku, loppu);
-    }
-
-
-    /**
      * @return
      */
     @Override
@@ -193,7 +174,8 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      */
     @Override
     public BigDecimal getValinPalkka(LocalDate alku, LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = getValinMerkinnat(alku, loppu);
+        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
+                loppu);
         return valinTyoHistoria.getPalkka();
     }
 
@@ -214,7 +196,8 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      */
     @Override
     public BigDecimal getValinBonukset(LocalDate alku, LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = getValinMerkinnat(alku, loppu);
+        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
+                loppu);
         return valinTyoHistoria.getBonukset();
     }
 
@@ -227,7 +210,8 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     @Override
     public BigDecimal getValinLaskennallinenPalkkaVapailta(LocalDate alku,
             LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = getValinMerkinnat(alku, loppu);
+        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
+                loppu);
         var tyoskentelyKaudet = valinTyoHistoria.paloittelePaivanTyypinMukaan();
         BigDecimal laskennallinenPalkka = BigDecimal.ZERO;
         for (var kausi : tyoskentelyKaudet) {
@@ -286,7 +270,8 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      */
     @Override
     public boolean onkoTaysiLomanMaaraytymisiKK(LocalDate kuukausi) {
-        TyoHistoria kuunTyoHistoria = getKuukaudenMerkinnat(kuukausi);
+        TyoHistoria kuunTyoHistoria = tyoHistoria
+                .getKuukaudenMerkinnat(kuukausi);
         int tyonVeroisiaPaivia = VuosilomaLaki
                 .tyonVeroisiaPaivia(kuunTyoHistoria);
         if (ansaintaSaanto == AnsaintaSaanto.Yli14PvKuukaudessa) {
@@ -341,19 +326,19 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         if (viikkoTyoAika != null) {
             return paivia.multiply(viikkoTyoAika)
                     .multiply(new BigDecimal("0.2"))
-                    .multiply(kausi.get(0).getTuntipalkka());
+                    .multiply(kausi.getTuntipalkka());
         }
-        LocalDate keskiTyoAjanLaskuValiLoppu = kausi.get(0).getPvm()
-                .minusDays(1);
+        LocalDate keskiTyoAjanLaskuValiLoppu = kausi.getAlkuPvm().minusDays(1);
         LocalDate keskiTyoAjanLaskuValiAlku = keskiTyoAjanLaskuValiLoppu
                 .minusDays(12 * 7 - 1);
-        BigDecimal keskimaarainenViikkoTyoAika = getValinMerkinnat(
-                keskiTyoAjanLaskuValiAlku, keskiTyoAjanLaskuValiLoppu)
-                        .getTyoAika()
-                        .divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
+        BigDecimal keskimaarainenViikkoTyoAika = tyoHistoria
+                .getValinMerkinnat(keskiTyoAjanLaskuValiAlku,
+                        keskiTyoAjanLaskuValiLoppu)
+                .getTyoAika()
+                .divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
         return paivia.multiply(keskimaarainenViikkoTyoAika)
                 .multiply(new BigDecimal("0.2"))
-                .multiply(kausi.get(0).getTuntipalkka());
+                .multiply(kausi.getTuntipalkka());
     }
 
 
