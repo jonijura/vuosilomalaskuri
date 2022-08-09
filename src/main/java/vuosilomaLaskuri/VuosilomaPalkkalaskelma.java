@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
 import tyosuhdeTiedot.TyosuhdeTiedotIF;
 
 /**
@@ -73,6 +74,16 @@ public class VuosilomaPalkkalaskelma {
     private BigDecimal ansiotIlmanYliTaiHata;
 
     /**
+     * 
+     */
+    private BigDecimal laskennallisiaTyopaivia;
+
+    /**
+     * 
+     */
+    private BigDecimal tuntipalkkaisenLomapalkkaKerroin;
+
+    /**
      * @return
      */
     public BigDecimal getAnsiotIlmanYliTaiHata() {
@@ -119,16 +130,6 @@ public class VuosilomaPalkkalaskelma {
             BigDecimal tuntipalkkaisenLomapalkkaKerroin) {
         this.tuntipalkkaisenLomapalkkaKerroin = tuntipalkkaisenLomapalkkaKerroin;
     }
-
-    /**
-     * 
-     */
-    private BigDecimal laskennallisiaTyopaivia;
-
-    /**
-     * 
-     */
-    private BigDecimal tuntipalkkaisenLomapalkkaKerroin;
 
     /**
      * @return
@@ -231,6 +232,25 @@ public class VuosilomaPalkkalaskelma {
      */
     public BigDecimal getKeskimaarainenPaivapalkka() {
         return ansiotIlmanYliTaiHata.divide(laskennallisiaTyopaivia, 5,
+                RoundingMode.HALF_UP);
+    }
+
+
+    /**
+     * @return
+     */
+    public LomarahanMaksuedellytys getLomarahanMaksuedellytys() {
+        return tyoSuhdeTiedot.getLomarahanMaksuedellytys();
+    }
+
+
+    /**
+     * TES 21§1)
+     * Lomaraha on 50 % vuosilomalain mukaan ansaittua lomaa vastaavasta lomapalkasta.
+     * @return
+     */
+    public BigDecimal getLomarahanSuuruus() {
+        return lomaPalkka.multiply(new BigDecimal("0.5")).setScale(2,
                 RoundingMode.HALF_UP);
     }
 

@@ -25,8 +25,8 @@ public class Main {
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
                 new BigDecimal("37.5"));
-        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
-        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.ViikkoPalkka);
+        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
+        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.TuntiPalkka);
 
         var vle = new VuosilomaEhdot();
         vle.setLomapalkkaKerroinAlleVuosi(new BigDecimal("0.1"));

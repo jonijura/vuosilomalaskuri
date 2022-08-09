@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
 
 /**
  * @author Joona1
@@ -113,5 +114,11 @@ public interface TyosuhdeTiedotIF {
      * @return
      */
     public BigDecimal getTyopaiviaViikossa();
+
+
+    /**
+     * @return
+     */
+    public LomarahanMaksuedellytys getLomarahanMaksuedellytys();
 
 }

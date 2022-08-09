@@ -18,6 +18,7 @@ import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
 import vuosilomaLaskuri.VuosilomaLaskuri;
 import vuosilomaLaskuri.VuosilomaPalkkalaskelma;
 
@@ -195,6 +196,10 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaAnsiotIlmanYliJaHata() {
+        /*
+         * tyotunteja 10€ tuntipalkalla 687.75, 11€ tuntipalkalla 642.5
+         * 10*687.75+11*642.5=13945
+         */
         assertEquals("Ansiot ilman yli- ja hätätöiden lisiä testitapaus C",
                 new BigDecimal("13945.00"), vlplC.getAnsiotIlmanYliTaiHata()
                         .setScale(2, RoundingMode.HALF_UP));
@@ -214,6 +219,9 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaTyoPaivienJaYlitoidenLkm() {
+        /*
+         * tavallisia työpäiviä 196, ylityötunteja 0
+         */
         assertEquals("Työpäivät ja kahdeksasosa ylitöistä testitapaus C",
                 new BigDecimal(196), vlplC.getLaskennallisiaTyopaivia()
                         .setScale(0, RoundingMode.HALF_UP));
@@ -253,6 +261,13 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaKeskimaarainenPaivapalkka() {
+        /*
+         * tyotunteja 10€ tuntipalkalla 687.75, 11€ tuntipalkalla 642.5 =>
+         * ansiot 10*687.75+11*642.5=13945 tavallisia työpäiviä 196,
+         * ylityötunteja 0
+         * 
+         * 13945/196=71.15
+         */
         assertEquals("Keskimääräinen päiväpalkka testitapaus C",
                 new BigDecimal("71.15"), vlplC.getKeskimaarainenPaivapalkka()
                         .setScale(2, RoundingMode.HALF_UP));
@@ -272,6 +287,9 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaVuosilomalainMukainenKerroin() {
+        /*
+         * vuosilomalain 11§ taulukosta kun lomapäiviä on 25 => kerroin 23.2
+         */
         assertEquals("Vuosilomalain mukainen kerroin testitapaus C",
                 new BigDecimal("23.2"),
                 vlplC.getTuntipalkkaisenLomapalkkaKerroin().setScale(1,
@@ -291,6 +309,9 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaViikkopalkka() {
+        /*
+         * viikkotyöaika 37.5 ja tuntipalkka 11 => 11*37.5 = 412.5
+         */
         assertEquals("Viikkopalkka loman alkaessa testitapaus D",
                 new BigDecimal("412.5"), vlplD.getViikkoPalkka());
     }
@@ -308,6 +329,10 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaBonuksienSuuruus() {
+        /*
+         * testitiedoston bonus-sarakkeen summa lomanmääräytymiskauden aikana
+         * 1013€
+         */
         assertEquals("Bonuksien suuruus testitapaus D",
                 new BigDecimal("1013.00"), vlplD.getBonukset());
     }
@@ -328,11 +353,24 @@ public class TestVuosilomaLaskelma {
      */
     @Test
     public void testaaTyossaolonVeroiseltaAjaltaSaamattaJaanytPalkka() {
+        /*
+         * laskennallista palkkaa kertyi 23 vanhempainvapaa päivältä välillä
+         * 1.12.2009-31.12-2009 tätä edeltävän 12 vk aikana oli 374.5 työtuntia,
+         * tuntipalkka 11€
+         * 
+         * => 23*374.5/(5*12)*11=1579.14€
+         */
         assertEquals(
                 "testitapaus A laskennallinen palkka työssäolon veroiselta ajalta",
                 new BigDecimal("1579.14"),
                 vlplA.getTyossaOlonVeroisenAjanPalkka().setScale(2,
                         RoundingMode.HALF_UP));
+        /*
+         * säännöllinen viikkotyöaika 37.5, tuntipalkka ja vapaiden lukumäärä
+         * kuten edellä
+         * 
+         * => 23*37.5/5*11=1897.50€
+         */
         assertEquals(
                 "testitapaus B laskennallinen palkka työssäolon veroiselta ajalta",
                 new BigDecimal("1897.50"),
@@ -361,36 +399,83 @@ public class TestVuosilomaLaskelma {
 
 
     /**
-     * 
+     * Useita eri laskutapoja riippuen vuosilomalaista 9-12§ ja kaupanalan tessistä 20§ 8-11
+     * Oleelliset lainaukset löytyvät aiemmista testeistä.
      */
     @Test
     public void testaaLomapalkka() {
+        /*
+         * Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja
+         * hätätöiden korotusosia sisältäen bonukset 14958.00 € Työssäolon
+         * veroiselta ajalta saamatta jäänyt palkka 1579.14 € Korvausprosentti
+         * 0.125 % Lomapalkka ( 14958.00 + 1579.14 ) * 0.125 = 2067.14
+         */
         assertEquals("Lomapalkka testitapaus A", new BigDecimal("2067.14"),
                 vlplA.getLomaPalkka());
+        /*
+         * Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja
+         * hätätöiden korotusosia sisältäen bonukset 14958.00 € Työssäolon
+         * veroiselta ajalta saamatta jäänyt palkka 1897.50 € Korvausprosentti
+         * 0.125 % Lomapalkka ( 14958.00 + 1897.50 ) * 0.125 = 2106.94
+         */
         assertEquals("Lomapalkka testitapaus B", new BigDecimal("2106.94"),
                 vlplB.getLomaPalkka());
+        /*
+         * Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja
+         * hätätöiden korotusosia tai bonuksia 13945.00 € Tehdyt työpäivät + 1/8
+         * ylitöistä 196.00 Keskimääräinen päiväpalkka 13945.00 : 196.00 = 71.15
+         * € Viikoittaisten työpäivien määrä jaettuna viidellä 1 Vuosilomalain
+         * mukainen kerroin 23.2 lomaPalkka 71.15 * 1 * 23.2 = 1650.63
+         */
         assertEquals("Lomapalkka testitapaus C", new BigDecimal("1650.63"),
                 vlplC.getLomaPalkka());
+        /*
+         * Viikkopalkka loman alkaessa 412.50 € Lomapäivien lukumäärä 25 Muu
+         * palkka 1013.00 € Korvausprosentti 0.125 % Lomapalkka 412.50 / 5 * 25
+         * + 1013.00 * 0.125 = 2189.13
+         */
         assertEquals("Lomapalkka testitapaus D", new BigDecimal("2189.13"),
                 vlplD.getLomaPalkka());
     }
 
 
     /**
+     * mahdolliset lomarahan maksuedellytykset:
+     * TES 21§ 2-9 
      * 
+     * tehtävänannon tiedot eivät riitä lomarahaoikeuden selvittämiseen
      */
     @Test
     public void testaaOikeusLomarahaan() {
-        // enum?
+        assertEquals("Lomarahan maksuedellytys testitapaus A",
+                LomarahanMaksuedellytys.eiAsetettu,
+                vlplA.getLomarahanMaksuedellytys());
+        assertEquals("Lomarahan maksuedellytys testitapaus B",
+                LomarahanMaksuedellytys.eiAsetettu,
+                vlplB.getLomarahanMaksuedellytys());
+        assertEquals("Lomarahan maksuedellytys testitapaus C",
+                LomarahanMaksuedellytys.eiAsetettu,
+                vlplC.getLomarahanMaksuedellytys());
+        assertEquals("Lomarahan maksuedellytys testitapaus D",
+                LomarahanMaksuedellytys.eiAsetettu,
+                vlplD.getLomarahanMaksuedellytys());
     }
 
 
     /**
-     * 
+     * TES 21§1)
+     * Lomaraha on 50 % vuosilomalain mukaan ansaittua lomaa vastaavasta lomapalkasta.
      */
     @Test
     public void testaaLomarahanMaara() {
-        //
+        assertEquals("Lomarahan suuruus testitapaus A",
+                new BigDecimal("1033.57"), vlplA.getLomarahanSuuruus());
+        assertEquals("Lomarahan suuruus testitapaus B",
+                new BigDecimal("1053.47"), vlplB.getLomarahanSuuruus());
+        assertEquals("Lomarahan suuruus testitapaus C",
+                new BigDecimal("825.32"), vlplC.getLomarahanSuuruus());
+        assertEquals("Lomarahan suuruus testitapaus D",
+                new BigDecimal("1094.57"), vlplD.getLomarahanSuuruus());
     }
 
 }

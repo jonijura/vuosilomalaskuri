@@ -8,14 +8,26 @@ import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import lomaLakiJaEhdot.VuosilomaLaki;
 
 /**
- * @author Joona1
+ * @author Joona Räty
  * @version 26.7.2022
  *
  */
 public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
     /**
-     * @author Joona1
+     * @author Joona Räty
+     * @version 9.8.2022
+     *
+     */
+    public enum LomarahanMaksuedellytys {
+        /**
+         * 
+         */
+        eiAsetettu
+    }
+
+    /**
+     * @author Joona Räty
      * @version 7.8.2022
      *
      */
@@ -40,7 +52,7 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     private AnsaintaSaanto ansaintaSaanto;
 
     /**
-     * @author Joona1
+     * @author Joona Räty
      * @version 7.8.2022
      *
      */
@@ -235,6 +247,15 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     @Override
     public LomapalkanLaskutapa getLomapalkanLaskutapa() {
         return lomapalkanLaskutapa;
+    }
+
+
+    /**
+     *
+     */
+    @Override
+    public LomarahanMaksuedellytys getLomarahanMaksuedellytys() {
+        return LomarahanMaksuedellytys.eiAsetettu;
     }
 
 
