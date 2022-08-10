@@ -6,7 +6,7 @@ package tyosuhdeTiedot;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
+import lomalaki.TyoMerkinnanTyyppi;
 
 /**
  * @author Joona1

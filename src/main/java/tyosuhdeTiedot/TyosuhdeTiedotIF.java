@@ -46,13 +46,6 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
-     * @param pvm
-     * @return
-     */
-    public BigDecimal viimeisinTuntipalkka(LocalDate pvm);
-
-
-    /**
      * @param vuosi 
      * @return
      */
@@ -72,9 +65,22 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
+     * @param pvm
+     * @return
+     */
+    public BigDecimal viimeisinTuntipalkka(LocalDate pvm);
+
+
+    /**
      * @param vuosi
      * @return 
      */
     public AnsaintaSaanto selvitaAnsaintaSaanto(int vuosi);
+
+
+    /**
+     * @return
+     */
+    public LomapalkanLaskutapa selvitaLomapalkanLaskutapa();
 
 }

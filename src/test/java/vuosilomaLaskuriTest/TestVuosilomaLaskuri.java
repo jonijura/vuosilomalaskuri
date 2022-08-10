@@ -8,11 +8,13 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
-import lomaLakiJaEhdot.VuosilomaEhdot;
+import lomalaki.VuosilomaEhdot;
 import tiedostonKasittely.TiedostonKasittelija;
 import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
 import vuosilomaLaskuri.VuosilomaLaskuri;
 
 /**
@@ -42,7 +44,7 @@ public class TestVuosilomaLaskuri {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
+                SopimusTyyppi.tuntiPalkkainen, new BigDecimal("37.5"));
         var vle = new VuosilomaEhdot();
         var vll = new VuosilomaLaskuri(tst, vle);
 
@@ -96,12 +98,13 @@ public class TestVuosilomaLaskuri {
      * • laskennallisesta palkasta.
      */
     @Test
-    public void testaaVuosilomaPalkka() {
+    public void testaaProsenttiperusteinenVuosilomaPalkka() {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
+                SopimusTyyppi.tuntiPalkkainen, new BigDecimal("37.5"));
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
+        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.Prosenttiperusteinen);
 
         var vle = new VuosilomaEhdot();
         /**
@@ -127,8 +130,10 @@ public class TestVuosilomaLaskuri {
         assertEquals(lomaPalkka.setScale(2, RoundingMode.HALF_UP),
                 palkka.setScale(2, RoundingMode.HALF_UP));
 
-        tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th);
+        tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
+                SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
+        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.Prosenttiperusteinen);
         vll = new VuosilomaLaskuri(tst, vle);
 
         palkka = vll.laskeLomaPalkka(2010);
@@ -173,7 +178,7 @@ public class TestVuosilomaLaskuri {
                 "29.8.2009|||9-15:15|6,25|6,25|6,25|" };
         var testiKausi = new TyoHistoria(testiKausiData);
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                testiKausi);
+                testiKausi, SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         var vle = new VuosilomaEhdot();
         var vll = new VuosilomaLaskuri(tst, vle);
@@ -198,7 +203,8 @@ public class TestVuosilomaLaskuri {
         BigDecimal viikkoTyoAika = new BigDecimal("37.5");
         BigDecimal tuntiPalkka = new BigDecimal(10);
         var tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testiKausiData), viikkoTyoAika);
+                new TyoHistoria(testiKausiData), SopimusTyyppi.tuntiPalkkainen,
+                viikkoTyoAika);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         var vle = new VuosilomaEhdot();
         var vll = new VuosilomaLaskuri(tst, vle);
@@ -210,7 +216,8 @@ public class TestVuosilomaLaskuri {
 
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
-        tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), th);
+        tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), th,
+                SopimusTyyppi.tuntiPalkkainen);
 
         testiKausiData = new String[] { "1.12.2009|vanhempainvapaa|",
                 "2.12.2009|vanhempainvapaa||", "3.12.2009|vanhempainvapaa||",
@@ -226,7 +233,7 @@ public class TestVuosilomaLaskuri {
                 "30.12.2009|vanhempainvapaa|", "31.12.2009|vanhempainvapaa|" };
         testiKausi = new TyoHistoria(testiKausiData);
         tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), testiKausi,
-                viikkoTyoAika);
+                SopimusTyyppi.tuntiPalkkainen, viikkoTyoAika);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         vll = new VuosilomaLaskuri(tst, vle);
         tulos = vll.laskennallinenPalkka(testiKausi);
@@ -256,7 +263,8 @@ public class TestVuosilomaLaskuri {
         BigDecimal tuntiPalkka = new BigDecimal(10);
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
-        var tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), th);
+        var tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1), th,
+                SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         var vle = new VuosilomaEhdot();
         var vll = new VuosilomaLaskuri(tst, vle);
@@ -283,7 +291,8 @@ public class TestVuosilomaLaskuri {
                 "30.12.2009|vanhempainvapaa|", "31.12.2009|vanhempainvapaa|" };
 
         testiKausi = new TyoHistoria(testiKausiData);
-        tst = new TyoSuhdeTiedot(LocalDate.of(2008, 10, 1), th);
+        tst = new TyoSuhdeTiedot(LocalDate.of(2008, 10, 1), th,
+                SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         vll = new VuosilomaLaskuri(tst, vle);
         tulos = vll.laskennallinenPalkka(testiKausi);

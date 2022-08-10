@@ -12,13 +12,14 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lomaLakiJaEhdot.VuosilomaEhdot;
+import lomalaki.VuosilomaEhdot;
 import tiedostonKasittely.TiedostonKasittelija;
 import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
 import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
+import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
 import vuosilomaLaskuri.VuosilomaLaskuri;
 import vuosilomaLaskuri.VuosilomaPalkkalaskelma;
 
@@ -64,15 +65,14 @@ public class TestVuosilomaLaskelma {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         var tstA = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1),
-                th.ilmanTyoajanTasauksia());
+                th.ilmanTyoajanTasauksia(), SopimusTyyppi.tuntiPalkkainen);
         var tstB = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
+                SopimusTyyppi.tuntiPalkkainen, new BigDecimal("37.5"));
         var tstC = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
+                SopimusTyyppi.tuntiPalkkainen, new BigDecimal("37.5"));
         tstC.setLomapalkanLaskutapa(LomapalkanLaskutapa.TuntiPalkka);
         var tstD = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
-        tstD.setLomapalkanLaskutapa(LomapalkanLaskutapa.ViikkoPalkka);
+                SopimusTyyppi.viikkoPalkkainen, new BigDecimal("37.5"));
 
         var vle = new VuosilomaEhdot();
         /**

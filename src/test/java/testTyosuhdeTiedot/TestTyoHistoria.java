@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
-import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
+import lomalaki.TyoMerkinnanTyyppi;
 import tyosuhdeTiedot.TyoHistoria;
 
 /**

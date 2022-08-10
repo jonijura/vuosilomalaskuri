@@ -10,6 +10,7 @@ import org.junit.Test;
 import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
 
 /**
  * @author Joona1
@@ -53,7 +54,7 @@ public class TestTyosuhdeTiedot {
                 "28.10.2009|||9-16:30|7,5|7,5|7,5|",
                 "31.10.2009|||9-16:30|7,5|7,5|7,5|" };
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testikk));
+                new TyoHistoria(testikk), SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         boolean b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 10, 1));
         assertEquals(true, b);
@@ -71,7 +72,7 @@ public class TestTyosuhdeTiedot {
                 "20.11.2009|||9-16:30|7,5|7,5|7,5|",
                 "24.11.2009|||9-16:30|7,5|7,5|7,5|186,00 €|" };
         tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testikk));
+                new TyoHistoria(testikk), SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 10, 1));
         assertEquals(false, b);
@@ -116,7 +117,7 @@ public class TestTyosuhdeTiedot {
                 "28.8.2009|||9-13|4|4|4|",
                 "29.8.2009|||9-15:15|6,25|6,25|6,25|" };
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testikk));
+                new TyoHistoria(testikk), SopimusTyyppi.tuntiPalkkainen);
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         boolean b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
         assertEquals(false, b);
@@ -141,13 +142,15 @@ public class TestTyosuhdeTiedot {
                 "14.8.2009|||9-16:30|7,5|7,5|7,5|" };
 
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testikk), new BigDecimal("0"));
+                new TyoHistoria(testikk), SopimusTyyppi.tuntiPalkkainen,
+                new BigDecimal("0"));
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         boolean b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
         assertEquals("nollatuntisopimus", false, b);
 
         tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
-                new TyoHistoria(testikk), new BigDecimal("37.5"));
+                new TyoHistoria(testikk), SopimusTyyppi.tuntiPalkkainen,
+                new BigDecimal("37.5"));
         tst.setAnsaintaSaanto(AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 8, 1));
         assertEquals("sovittu viikkotyöaika", true, b);

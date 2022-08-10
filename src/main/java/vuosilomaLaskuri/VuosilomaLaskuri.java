@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
-import lomaLakiJaEhdot.VuosilomaEhdot;
-import lomaLakiJaEhdot.VuosilomaLaki;
+import lomalaki.TyoMerkinnanTyyppi;
+import lomalaki.VuosilomaEhdot;
+import lomalaki.VuosilomaLaki;
 import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyosuhdeTiedotIF;
@@ -345,6 +345,7 @@ public class VuosilomaLaskuri {
         this.vuosilomaPalkkalaskelma = new VuosilomaPalkkalaskelma();
         vuosilomaPalkkalaskelma
                 .setAnsaintaSaanto(tyoSuhdeTiedot.selvitaAnsaintaSaanto(vuosi));
+        tyoSuhdeTiedot.selvitaLomapalkanLaskutapa();
         vuosilomaPalkkalaskelma.setTyosuhdeTiedot(tyoSuhdeTiedot);
         vuosilomaPalkkalaskelma.setLomaPaivat(laskeLomapaivat(vuosi));
         vuosilomaPalkkalaskelma.setLomaPalkka(laskeLomaPalkka(vuosi));

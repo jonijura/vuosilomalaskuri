@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
-import lomaLakiJaEhdot.VuosilomaLaki;
+import lomalaki.VuosilomaLaki;
 import tyosuhdeTiedot.TyoHistoria;
 
 /**

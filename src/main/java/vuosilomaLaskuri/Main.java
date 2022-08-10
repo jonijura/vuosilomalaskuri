@@ -3,12 +3,11 @@ package vuosilomaLaskuri;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lomaLakiJaEhdot.VuosilomaEhdot;
+import lomalaki.VuosilomaEhdot;
 import tiedostonKasittely.TiedostonKasittelija;
 import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
 
 /**
  * @author Joona1
@@ -24,9 +23,7 @@ public class Main {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
         TyoSuhdeTiedot tst = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
-                new BigDecimal("37.5"));
-        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
-        tst.setLomapalkanLaskutapa(LomapalkanLaskutapa.TuntiPalkka);
+                SopimusTyyppi.tuntiPalkkainen, new BigDecimal("37.5"));
 
         var vle = new VuosilomaEhdot();
         vle.setLomapalkkaKerroinAlleVuosi(new BigDecimal("0.1"));

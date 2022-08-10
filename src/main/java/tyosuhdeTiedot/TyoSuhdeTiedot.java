@@ -3,7 +3,7 @@ package tyosuhdeTiedot;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lomaLakiJaEhdot.VuosilomaLaki;
+import lomalaki.VuosilomaLaki;
 
 /**
  * @author Joona Räty
@@ -76,7 +76,32 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     /**
      * 
      */
-    private LomapalkanLaskutapa lomapalkanLaskutapa = LomapalkanLaskutapa.Prosenttiperusteinen;
+    private LomapalkanLaskutapa lomapalkanLaskutapa;
+
+    /**
+     * @author Joona1
+     * @version 10.8.2022
+     *
+     */
+    public enum SopimusTyyppi {
+        /**
+         * 
+         */
+        kuukausiPalkkainen,
+        /**
+         * 
+         */
+        viikkoPalkkainen,
+        /**
+         * 
+         */
+        tuntiPalkkainen
+    }
+
+    /**
+     * 
+     */
+    private SopimusTyyppi sopimusTyyppi;
 
     /**
      * 
@@ -101,13 +126,15 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     /**
      * @param sopimuksenAlkuPv2 
      * @param th 
+     * @param st 
      * @param viikkoTyoAika2 
      * 
      */
     public TyoSuhdeTiedot(LocalDate sopimuksenAlkuPv2, TyoHistoria th,
-            BigDecimal viikkoTyoAika2) {
+            SopimusTyyppi st, BigDecimal viikkoTyoAika2) {
         sopimuksenAlkuPv = sopimuksenAlkuPv2;
         tyoHistoria = th;
+        sopimusTyyppi = st;
         viikkoTyoAika = viikkoTyoAika2;
     }
 
@@ -115,10 +142,13 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     /**
      * @param sopimuksenAlkuPv2 
      * @param th
+     * @param st 
      */
-    public TyoSuhdeTiedot(LocalDate sopimuksenAlkuPv2, TyoHistoria th) {
+    public TyoSuhdeTiedot(LocalDate sopimuksenAlkuPv2, TyoHistoria th,
+            SopimusTyyppi st) {
         sopimuksenAlkuPv = sopimuksenAlkuPv2;
         tyoHistoria = th;
+        sopimusTyyppi = st;
         viikkoTyoAika = null;
     }
 
@@ -133,18 +163,17 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
 
     /**
-     * @param as
+     *
      */
-    public void setAnsaintaSaanto(AnsaintaSaanto as) {
-        ansaintaSaanto = as;
+    @Override
+    public BigDecimal getTyopaiviaViikossa() {
+        return new BigDecimal(tyoPaiviaViikossa);
     }
 
 
-    /**
-     * @param laskutapa
-     */
-    public void setLomapalkanLaskutapa(LomapalkanLaskutapa laskutapa) {
-        this.lomapalkanLaskutapa = laskutapa;
+    @Override
+    public TyoHistoria getValinMerkinnat(LocalDate alku, LocalDate loppu) {
+        return tyoHistoria.getValinMerkinnat(alku, loppu);
     }
 
 
@@ -163,6 +192,22 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     @Override
     public LomarahanMaksuedellytys getLomarahanMaksuedellytys() {
         return LomarahanMaksuedellytys.eiAsetettu;
+    }
+
+
+    /**
+     * @param as
+     */
+    public void setAnsaintaSaanto(AnsaintaSaanto as) {
+        ansaintaSaanto = as;
+    }
+
+
+    /**
+     * @param laskutapa
+     */
+    public void setLomapalkanLaskutapa(LomapalkanLaskutapa laskutapa) {
+        this.lomapalkanLaskutapa = laskutapa;
     }
 
 
@@ -230,15 +275,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     }
 
 
-    /**
-     *
-     */
-    @Override
-    public BigDecimal getTyopaiviaViikossa() {
-        return new BigDecimal(tyoPaiviaViikossa);
-    }
-
-
     /*
      * Vuosilomalaki 6§ Täytenä lomanmääräytymiskuukautena pidetään
      * kalenterikuukautta, jolloin työntekijälle on kertynyt vähintään 14
@@ -270,9 +306,56 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     }
 
 
+    /*
+     * 
+     */
     @Override
-    public TyoHistoria getValinMerkinnat(LocalDate alku, LocalDate loppu) {
-        return tyoHistoria.getValinMerkinnat(alku, loppu);
+    public LomapalkanLaskutapa selvitaLomapalkanLaskutapa() {
+        if (lomapalkanLaskutapa != null)
+            return lomapalkanLaskutapa;
+        switch (sopimusTyyppi) {
+        case kuukausiPalkkainen:
+            this.lomapalkanLaskutapa = LomapalkanLaskutapa.Kuukausipalkkainen;
+            break;
+        case viikkoPalkkainen:
+            this.lomapalkanLaskutapa = LomapalkanLaskutapa.ViikkoPalkka;
+            break;
+        case tuntiPalkkainen:
+            /*
+             * kaupanalan tessin mukaisesti 20§8) Lomapalkka tai -korvaus on
+             * sekä tuntipalkkaisella että suhteutettua kuukausipalkkaa saavalla
+             * jäljempänä esitetystä lomanmääräytymisvuoden ansiosta: ...
+             * 
+             * -> prosenttiperusteinen lomapalkka
+             */
+            this.lomapalkanLaskutapa = LomapalkanLaskutapa.Prosenttiperusteinen;
+            /*
+             * vuosilomalain mukaisesti 11§ Muun kuin viikko- tai
+             * kuukausipalkalla työskentelevän sellaisen työntekijän
+             * vuosilomapalkka, joka sopimuksen mukaan työskentelee vähintään 14
+             * päivänä kalenterikuukaudessa, lasketaan kertomalla hänen
+             * keskipäiväpalkkansa lomapäivien määrän perusteella määräytyvällä
+             * kertoimella: ...
+             * 
+             * -> Tuntipalkka
+             * 
+             * 10§ Jos edellä 6 §:n 2 momentissa tarkoitetun työntekijän
+             * sopimuksen mukainen työaika on niin vähäinen, että tästä syystä
+             * vain osa kalenterikuukausista on täysiä
+             * lomanmääräytymiskuukausia, hänen lomapalkkansa lasketaan 12 §:n
+             * mukaan.
+             * 
+             * -> prosenttiperusteinen
+             */
+            // lomapalkanLaskutapa = ansaintaSaanto ==
+            // AnsaintaSaanto.Yli14PvKuukaudessa
+            // ? LomapalkanLaskutapa.TuntiPalkka
+            // : LomapalkanLaskutapa.Prosenttiperusteinen;
+            break;
+        default:
+            throw new RuntimeException("sopimuksen tyyppiä ei ole määritelty");
+        }
+        return lomapalkanLaskutapa;
     }
 
 }

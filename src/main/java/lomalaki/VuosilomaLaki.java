@@ -1,4 +1,4 @@
-package lomaLakiJaEhdot;
+package lomalaki;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

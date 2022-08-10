@@ -1,7 +1,7 @@
 /**
  * 
  */
-package lomaLakiJaEhdot;
+package lomalaki;
 
 /**
  * @author Joona1

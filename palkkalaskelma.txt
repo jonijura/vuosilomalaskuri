@@ -1,20 +1,13 @@
-Tuntipalkkaperusteinen lomapalkka
+Prosenttiperusteinen lomapalkka
 
-Lomanmääräytymisvuoden ansio työssäolon ajalta ilman
-yli- ja hätätöiden korotusosia
-	13945.00 €
+Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja hätätöiden korotusosia
+	14958.00 €
 
-Tehdyt työpäivät + 1/8 ylitöistä
-	196.00
+Työssäolon veroiselta ajalta saamatta jäänyt palkka
+	1897.50 €
 
-Keskimääräinen päiväpalkka
-	13945.00 : 196.00 = 71.15 €
+Korvausprosentti
+	0.125 %
 
-Viikoittaisten työpäivien määrä jaettuna viidellä
-	1
-
-Vuosilomalain mukainen kerroin 
-	 25.9 
-
-lomaPalkka
-	71.15 * 1 * 25.9 = 1842.73
+Lomapalkka
+	( 14958.00 + 1897.50 ) * 0.125 = 2106.94
