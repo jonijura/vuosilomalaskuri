@@ -109,13 +109,13 @@ public class TestVuosilomaLaskelma {
      * 7 §:ssä tarkoitettua työssäolon veroista tuntia.
      * 
      * Eli ansainta sääntö riippuu siitä, miten se on sopimuksessa määritelty.
-     * Koska tätä ei kerrota, olen laskenut montako työpäivää kuukaudessa tulee
-     * keskimäärin ja katsonut onko se yli 14.
+     * Koska tätä ei kerrota, selvitetään ansaintasääntö sen perusteella onko
+     * jokaisessa kuukaudessa ollut mahdollisuus työskennellä vähintään 14 pv
      */
     @Test
     public void testaaAnsaintaSaanto() {
         assertEquals("ansaintasääntö testitapaus A", vlplA.getAnsaintaSaanto(),
-                AnsaintaSaanto.Yli14PvKuukaudessa);
+                AnsaintaSaanto.Yli35TuntiaKuukaudessa);
         assertEquals("ansaintasääntö testitapaus B", vlplB.getAnsaintaSaanto(),
                 AnsaintaSaanto.Yli14PvKuukaudessa);
         assertEquals("ansaintasääntö testitapaus C", vlplC.getAnsaintaSaanto(),

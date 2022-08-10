@@ -14,7 +14,7 @@ Viikoittaisten työpäivien määrä jaettuna viidellä
 	1
 
 Vuosilomalain mukainen kerroin 
-	 23.2 
+	 25.9 
 
 lomaPalkka
-	71.15 * 1 * 23.2 = 1650.63
+	71.15 * 1 * 25.9 = 1842.73

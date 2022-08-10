@@ -282,8 +282,9 @@ public class VuosilomaLaskuri {
      * @return
      */
     public VuosilomaPalkkalaskelma laskePalkkalaskelma(int vuosi) {
-        tyoSuhdeTiedot.selvitaAnsaintaSaanto(vuosi);
         this.vuosilomaPalkkalaskelma = new VuosilomaPalkkalaskelma();
+        vuosilomaPalkkalaskelma
+                .setAnsaintaSaanto(tyoSuhdeTiedot.selvitaAnsaintaSaanto(vuosi));
         vuosilomaPalkkalaskelma.setTyosuhdeTiedot(tyoSuhdeTiedot);
         vuosilomaPalkkalaskelma.setLomaPaivat(laskeLomapaivat(vuosi));
         vuosilomaPalkkalaskelma.setLomaPalkka(laskeLomaPalkka(vuosi));

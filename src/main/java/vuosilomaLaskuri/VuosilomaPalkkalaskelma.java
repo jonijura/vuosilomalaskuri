@@ -84,6 +84,11 @@ public class VuosilomaPalkkalaskelma {
     private BigDecimal tuntipalkkaisenLomapalkkaKerroin;
 
     /**
+     * 
+     */
+    private AnsaintaSaanto ansaintaSaanto;
+
+    /**
      * @return
      */
     public BigDecimal getAnsiotIlmanYliTaiHata() {
@@ -192,7 +197,7 @@ public class VuosilomaPalkkalaskelma {
      * @return
      */
     public AnsaintaSaanto getAnsaintaSaanto() {
-        return tyoSuhdeTiedot.getAnsaintaSaanto();
+        return ansaintaSaanto;
     }
 
 
@@ -334,6 +339,14 @@ public class VuosilomaPalkkalaskelma {
      */
     public void setLomaPaivat(int lomaPaivienLkm) {
         lomaPaivia = lomaPaivienLkm;
+    }
+
+
+    /**
+     * @param saanto
+     */
+    public void setAnsaintaSaanto(AnsaintaSaanto saanto) {
+        ansaintaSaanto = saanto;
     }
 
 

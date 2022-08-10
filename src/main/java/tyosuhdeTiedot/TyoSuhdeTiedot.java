@@ -362,21 +362,34 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     }
 
 
+    /*
+     * Vuosilomalaki 6§ Täytenä lomanmääräytymiskuukautena pidetään
+     * kalenterikuukautta, jolloin työntekijälle on kertynyt vähintään 14
+     * työssäolopäivää tai 7 §:n 1 ja 2 momentissa tarkoitettua työssäolon
+     * veroista päivää. Jos työntekijä on sopimuksen mukaisesti työssä niin
+     * harvoina päivinä, että hänelle ei tästä syystä kerry ainoatakaan 14
+     * työssäolopäivää sisältävää kalenterikuukautta tai vain osa
+     * kalenterikuukausista sisältää 14 työssäolopäivää, täydeksi
+     * lomanmääräytymiskuukaudeksi katsotaan sellainen kalenterikuukausi, jonka
+     * aikana työntekijälle on kertynyt vähintään 35 työtuntia tai 7 §:ssä
+     * tarkoitettua työssäolon veroista tuntia.
+     */
     @Override
-    public AnsaintaSaanto getAnsaintaSaanto() {
-        return ansaintaSaanto;
-    }
+    public AnsaintaSaanto selvitaAnsaintaSaanto(int vuosi) {
+        if (viikkoTyoAika != null
+                && viikkoTyoAika.compareTo(new BigDecimal(30)) > 0) {
+            ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
+            return ansaintaSaanto;
+        }
 
-
-    @Override
-    public void selvitaAnsaintaSaanto(int vuosi) {
         for (var kk : VuosilomaLaki.getLomaVuodenKuukaudet(vuosi)) {
             if (tyoHistoria.mahdollisiaTyopaivia(kk) < 14) {
                 ansaintaSaanto = AnsaintaSaanto.Yli35TuntiaKuukaudessa;
-                break;
+                return ansaintaSaanto;
             }
         }
         ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
+        return ansaintaSaanto;
     }
 
 }

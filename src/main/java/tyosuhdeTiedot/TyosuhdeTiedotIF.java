@@ -118,14 +118,9 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
-     * @return
-     */
-    public AnsaintaSaanto getAnsaintaSaanto();
-
-
-    /**
      * @param vuosi
+     * @return 
      */
-    public void selvitaAnsaintaSaanto(int vuosi);
+    public AnsaintaSaanto selvitaAnsaintaSaanto(int vuosi);
 
 }
