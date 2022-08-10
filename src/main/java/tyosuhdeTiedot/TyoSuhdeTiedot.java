@@ -1,7 +1,6 @@
 package tyosuhdeTiedot;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import lomaLakiJaEhdot.VuosilomaLaki;
@@ -159,26 +158,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
 
 
     /**
-     * @param alku
-     * @param loppu
-     * @return
-     */
-    @Override
-    public BigDecimal getValinLaskennallinenPalkkaVapailta(LocalDate alku,
-            LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
-                loppu);
-        var tyoskentelyKaudet = valinTyoHistoria.paloittelePaivanTyypinMukaan();
-        BigDecimal laskennallinenPalkka = BigDecimal.ZERO;
-        for (var kausi : tyoskentelyKaudet) {
-            laskennallinenPalkka = laskennallinenPalkka
-                    .add(laskennallinenPalkka(kausi));
-        }
-        return laskennallinenPalkka;
-    }
-
-
-    /**
      *
      */
     @Override
@@ -237,52 +216,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         if (viikkoTyoAika == null)
             return BigDecimal.ZERO;
         return viikkoTyoAika.multiply(new BigDecimal("0.2"));
-    }
-
-
-    /**
-     * @param kausi
-     * @return
-     * 
-     * Kaupanalan TES 20§11)
-     * Laskennallinen palkka määräytyy poissaolon alkamishetken tuntipalkan 
-     * ja sovitun keskimääräisen viikkotyöajan mukaan tai kuukausipalkkaisella 
-     * poissaolon alkamishetken kuukausipalkan mukaan.
-     * Jos tuntipalkkaisella ei ole sovittu keskimääräistä viikkotyöaikaa, laskennallinen
-     * palkka määräytyy poissaoloa edeltävän 12 viikon keskimääräisen viikkotyöajan
-     * mukaan
-     * 
-     * Vuosilomalaki 12§
-     * Jos työntekijä on lomanmääräytymisvuoden aikana ollut estynyt tekemästä 
-     * työtä 7 §:n 2 momentin 1–4 tai 7 kohdassa tarkoitetusta syystä, vuosilomapalkan 
-     * perusteena olevaan palkkaan lisätään laskennallisesti poissaoloajalta saamatta 
-     * jäänyt palkka enintään 7 §:n 3 momentissa säädetyltä ajalta. Poissaoloajan palkka 
-     * lasketaan, jollei muusta ole sovittu, työntekijän keskimääräisen viikkotyöajan 
-     * ja poissaolon alkamishetken palkan mukaan ottaen huomioon poissaoloaikana toteutetut 
-     * palkankorotukset. Jos keskimääräisestä viikkotyöajasta ei ole sovittu, laskennallinen 
-     * palkka määräytyy poissaoloa edeltävän 12 viikon keskimääräisen viikkotyöajan mukaan.
-     */
-    public BigDecimal laskennallinenPalkka(TyoHistoria kausi) {
-        if (!VuosilomaLaki.onkoOikeutettuLaskennalliseenPalkkaan(
-                kausi.merkintojenTyyppi()))
-            return BigDecimal.ZERO;
-        BigDecimal paivia = new BigDecimal(kausi.merkintojenLkm());
-        if (viikkoTyoAika != null) {
-            return paivia.multiply(viikkoTyoAika)
-                    .multiply(new BigDecimal("0.2"))
-                    .multiply(kausi.getTuntipalkka());
-        }
-        LocalDate keskiTyoAjanLaskuValiLoppu = kausi.getAlkuPvm().minusDays(1);
-        LocalDate keskiTyoAjanLaskuValiAlku = keskiTyoAjanLaskuValiLoppu
-                .minusDays(12 * 7 - 1);
-        BigDecimal keskimaarainenViikkoTyoAika = tyoHistoria
-                .getValinMerkinnat(keskiTyoAjanLaskuValiAlku,
-                        keskiTyoAjanLaskuValiLoppu)
-                .getTyoAika()
-                .divide(new BigDecimal(12), 5, RoundingMode.HALF_UP);
-        return paivia.multiply(keskimaarainenViikkoTyoAika)
-                .multiply(new BigDecimal("0.2"))
-                .multiply(kausi.getTuntipalkka());
     }
 
 

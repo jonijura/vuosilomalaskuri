@@ -46,15 +46,6 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
-     * @param alku
-     * @param loppu
-     * @return
-     */
-    public BigDecimal getValinLaskennallinenPalkkaVapailta(LocalDate alku,
-            LocalDate loppu);
-
-
-    /**
      * @param pvm
      * @return
      */
