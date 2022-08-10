@@ -1,7 +1,7 @@
 /**
  * 
  */
-package vuosilomaLaskuri;
+package vuosilomalaskuri;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 import lomalaki.TyoMerkinnanTyyppi;
 import lomalaki.VuosilomaEhdot;
 import lomalaki.VuosilomaLaki;
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyosuhdeTiedotIF;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoSuhdeTiedot;
+import tyosuhdetiedot.TyosuhdeTiedotIF;
 
 /**
  * @author Joona1

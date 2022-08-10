@@ -3,7 +3,7 @@ package lomalaki;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import tyosuhdeTiedot.TyoHistoria;
+import tyosuhdetiedot.TyoHistoria;
 
 /**
  * @author Joona1

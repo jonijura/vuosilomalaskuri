@@ -1,13 +1,13 @@
-package vuosilomaLaskuri;
+package vuosilomalaskuri;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lomalaki.VuosilomaEhdot;
-import tiedostonKasittely.TiedostonKasittelija;
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
+import tiedostonkasittely.TiedostonKasittelija;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoSuhdeTiedot;
+import tyosuhdetiedot.TyoSuhdeTiedot.SopimusTyyppi;
 
 /**
  * @author Joona1

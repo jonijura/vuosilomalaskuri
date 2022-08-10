@@ -1,4 +1,4 @@
-package testTyosuhdeTiedot;
+package testtyosuhdetiedot;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,10 +7,10 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
-import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoSuhdeTiedot;
+import tyosuhdetiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdetiedot.TyoSuhdeTiedot.SopimusTyyppi;
 
 /**
  * @author Joona1

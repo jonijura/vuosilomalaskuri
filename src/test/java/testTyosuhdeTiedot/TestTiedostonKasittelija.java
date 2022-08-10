@@ -1,7 +1,7 @@
 /**
  * 
  */
-package testTyosuhdeTiedot;
+package testtyosuhdetiedot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 
 import org.junit.Test;
 
-import tiedostonKasittely.TiedostonKasittelija;
-import tyosuhdeTiedot.TyoHistoria;
+import tiedostonkasittely.TiedostonKasittelija;
+import tyosuhdetiedot.TyoHistoria;
 
 /**
  * @author Joona1

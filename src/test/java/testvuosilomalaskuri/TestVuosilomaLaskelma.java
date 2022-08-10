@@ -1,7 +1,7 @@
 /**
  * 
  */
-package vuosilomaLaskuriTest;
+package testvuosilomalaskuri;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,15 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import lomalaki.VuosilomaEhdot;
-import tiedostonKasittely.TiedostonKasittelija;
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
-import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
-import vuosilomaLaskuri.VuosilomaLaskuri;
-import vuosilomaLaskuri.VuosilomaPalkkalaskelma;
+import tiedostonkasittely.TiedostonKasittelija;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoSuhdeTiedot;
+import tyosuhdetiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdetiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdetiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
+import tyosuhdetiedot.TyoSuhdeTiedot.SopimusTyyppi;
+import vuosilomalaskuri.VuosilomaLaskuri;
+import vuosilomalaskuri.VuosilomaPalkkalaskelma;
 
 /**
  * @author Joona1

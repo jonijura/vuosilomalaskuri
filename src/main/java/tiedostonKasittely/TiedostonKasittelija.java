@@ -1,7 +1,7 @@
 /**
  * 
  */
-package tiedostonKasittely;
+package tiedostonkasittely;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoPaivaMerkinta;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoPaivaMerkinta;
 
 /**
  * @author Joona1

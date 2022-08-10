@@ -1,4 +1,4 @@
-package vuosilomaLaskuriTest;
+package testvuosilomalaskuri;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,13 +9,13 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 import lomalaki.VuosilomaEhdot;
-import tiedostonKasittely.TiedostonKasittelija;
-import tyosuhdeTiedot.TyoHistoria;
-import tyosuhdeTiedot.TyoSuhdeTiedot;
-import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
-import tyosuhdeTiedot.TyoSuhdeTiedot.SopimusTyyppi;
-import vuosilomaLaskuri.VuosilomaLaskuri;
+import tiedostonkasittely.TiedostonKasittelija;
+import tyosuhdetiedot.TyoHistoria;
+import tyosuhdetiedot.TyoSuhdeTiedot;
+import tyosuhdetiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdetiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdetiedot.TyoSuhdeTiedot.SopimusTyyppi;
+import vuosilomalaskuri.VuosilomaLaskuri;
 
 /**
  * @author Joona1

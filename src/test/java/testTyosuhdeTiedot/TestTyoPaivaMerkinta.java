@@ -1,7 +1,7 @@
 /**
  * 
  */
-package testTyosuhdeTiedot;
+package testtyosuhdetiedot;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 import lomalaki.TyoMerkinnanTyyppi;
-import tyosuhdeTiedot.TyoPaivaMerkinta;
+import tyosuhdetiedot.TyoPaivaMerkinta;
 
 /**
  * @author Joona1

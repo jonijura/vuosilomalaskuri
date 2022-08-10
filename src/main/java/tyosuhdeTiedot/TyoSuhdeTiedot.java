@@ -1,4 +1,4 @@
-package tyosuhdeTiedot;
+package tyosuhdetiedot;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

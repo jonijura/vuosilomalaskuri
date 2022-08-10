@@ -1,7 +1,7 @@
 /**
  * 
  */
-package testTyosuhdeTiedot;
+package testtyosuhdetiedot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 import lomalaki.TyoMerkinnanTyyppi;
-import tyosuhdeTiedot.TyoHistoria;
+import tyosuhdetiedot.TyoHistoria;
 
 /**
  * @author Joona1

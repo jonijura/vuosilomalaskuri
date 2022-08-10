@@ -1,7 +1,7 @@
 /**
  * 
  */
-package testLomalakijaEhdot;
+package testlomalaki;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import org.junit.Test;
 
 import lomalaki.VuosilomaLaki;
-import tyosuhdeTiedot.TyoHistoria;
+import tyosuhdetiedot.TyoHistoria;
 
 /**
  * @author Joona1

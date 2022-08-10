@@ -1,14 +1,14 @@
 /**
  * 
  */
-package tyosuhdeTiedot;
+package tyosuhdetiedot;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import tyosuhdeTiedot.TyoSuhdeTiedot.AnsaintaSaanto;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
-import tyosuhdeTiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
+import tyosuhdetiedot.TyoSuhdeTiedot.AnsaintaSaanto;
+import tyosuhdetiedot.TyoSuhdeTiedot.LomapalkanLaskutapa;
+import tyosuhdetiedot.TyoSuhdeTiedot.LomarahanMaksuedellytys;
 
 /**
  * @author Joona1
