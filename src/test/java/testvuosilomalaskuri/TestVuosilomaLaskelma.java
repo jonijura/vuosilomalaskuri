@@ -92,6 +92,8 @@ public class TestVuosilomaLaskelma {
          * 
          * (tuntipalkkaisten lomapalkan laskutapa vastaa tessissä vuosilomalain prosenttiperusteista
          * lomapalkkaa)
+         * 
+         * Tapaus A on tuntipalkkainen, joten se päätyy prosenttiperusteiseen lomapalkan laskutapaan.
          */
         assertEquals("lomapalkan laskutapa",
                 LomapalkanLaskutapa.Prosenttiperusteinen,
@@ -178,6 +180,8 @@ public class TestVuosilomaLaskelma {
          * hätätöiden korotusosia sisältäen bonukset 14958.00 € Työssäolon
          * veroiselta ajalta saamatta jäänyt palkka (laskennallinen palkka) 1579.14 € Korvausprosentti
          * 0.125 % Prosenttiperusteinen lomapalkka ( 14958.00 + 1579.14 ) * 0.125 = 2067.14
+         * Poissaoloajan palkkaa ei ole käsitelty, sillä se koskee mm sairauspoissaoloja, joita
+         * ei testitapauksissa ole.
          */
         assertEquals("Lomapalkka", new BigDecimal("2067.14"),
                 vlplA.getLomaPalkka());
@@ -233,6 +237,10 @@ public class TestVuosilomaLaskelma {
          * 
          * (vastaa vuosilomalain prosenttiperusteista
          * lomapalkkaa)
+         * 
+         * Tuntipalkkaisena tapaus B päätyy siis tessin mukaan prosenttiperusteiseen lomapalkan
+         * laskemistapaan. Vuosilomalain mukaisesti tapaus B päätyisi tuntipalkkaiseen, mikä on
+         * testitapaus C.
          */
         assertEquals("lomapalkan laskutapa",
                 LomapalkanLaskutapa.Prosenttiperusteinen,
@@ -319,6 +327,8 @@ public class TestVuosilomaLaskelma {
          * hätätöiden korotusosia sisältäen bonukset 14958.00 € Työssäolon
          * veroiselta ajalta saamatta jäänyt palkka (laskennallinen palkka) 1897.50 € Korvausprosentti
          * 0.125 % Prosenttiperusteinen lomapalkka ( 14958.00 + 1897.50 ) * 0.125 = 2106.94
+         * Poissaoloajan palkkaa ei ole käsitelty, sillä se koskee mm sairauspoissaoloja, joita
+         * ei testitapauksissa ole.
          */
         assertEquals("Lomapalkka testitapaus B", new BigDecimal("2106.94"),
                 vlplB.getLomaPalkka());
