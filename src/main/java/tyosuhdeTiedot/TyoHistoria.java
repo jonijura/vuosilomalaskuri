@@ -5,7 +5,6 @@ package tyosuhdeTiedot;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -220,15 +219,6 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
     /**
      * @return
      */
-    public long kestoKuukausina() {
-        return ChronoUnit.MONTHS.between(historia.get(0).getPvm(),
-                historia.get(historia.size() - 1).getPvm());
-    }
-
-
-    /**
-     * @return
-     */
     public int getTyoPaivienLkm() {
         int tyoPaivia = 0;
         for (var tp : historia)
@@ -253,5 +243,20 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
      */
     public LocalDate getAlkuPvm() {
         return historia.get(0).getPvm();
+    }
+
+
+    /**
+     * @param kuukausi
+     * @return
+     */
+    public int mahdollisiaTyopaivia(LocalDate kuukausi) {
+        var th = getKuukaudenMerkinnat(kuukausi);
+        int lkm = 0;
+        for (var tpm : th) {
+            if (tpm.onkoMahdollinenTyopaiva())
+                lkm++;
+        }
+        return lkm;
     }
 }

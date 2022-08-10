@@ -131,6 +131,7 @@ public class VuosilomaPalkkalaskelma {
         this.tuntipalkkaisenLomapalkkaKerroin = tuntipalkkaisenLomapalkkaKerroin;
     }
 
+
     /**
      * @return
      */

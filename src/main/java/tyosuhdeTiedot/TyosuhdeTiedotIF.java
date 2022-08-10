@@ -81,12 +81,7 @@ public interface TyosuhdeTiedotIF {
 
 
     /**
-     * @return
-     */
-    public AnsaintaSaanto getAnsaintaSaanto();
-
-
-    /**
+     * @param vuosi 
      * @return
      */
     public LomapalkanLaskutapa getLomapalkanLaskutapa();
@@ -120,5 +115,17 @@ public interface TyosuhdeTiedotIF {
      * @return
      */
     public LomarahanMaksuedellytys getLomarahanMaksuedellytys();
+
+
+    /**
+     * @return
+     */
+    public AnsaintaSaanto getAnsaintaSaanto();
+
+
+    /**
+     * @param vuosi
+     */
+    public void selvitaAnsaintaSaanto(int vuosi);
 
 }

@@ -233,4 +233,12 @@ public class TyoPaivaMerkinta {
         return alku.isBefore(pvm) && loppu.isAfter(pvm);
     }
 
+
+    /**
+     * @return
+     */
+    public boolean onkoMahdollinenTyopaiva() {
+        return paivanTyyppi.onkoMahdollinenTyopaiva();
+    }
+
 }

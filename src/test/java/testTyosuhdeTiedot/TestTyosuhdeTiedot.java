@@ -74,6 +74,7 @@ public class TestTyosuhdeTiedot {
                 "24.11.2009|||9-16:30|7,5|7,5|7,5|186,00 €|" };
         tst = new TyoSuhdeTiedot(LocalDate.of(2009, 10, 1),
                 new TyoHistoria(testikk));
+        tst.setAnsaintaSaanto(AnsaintaSaanto.Yli14PvKuukaudessa);
         b = tst.onkoTaysiLomanMaaraytymisiKK(LocalDate.of(2009, 10, 1));
         assertEquals(false, b);
 

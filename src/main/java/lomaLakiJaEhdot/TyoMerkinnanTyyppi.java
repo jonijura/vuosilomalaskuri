@@ -63,4 +63,27 @@ public enum TyoMerkinnanTyyppi {
             throw new RuntimeException("tuntematon työmerkinnän tyyppi");
         }
     }
+
+
+    /**
+     * @return
+     */
+    public boolean onkoMahdollinenTyopaiva() {
+        switch (this) {
+        case vanhempainvapaa:
+            return true;
+        case Arkipyhakorvaukset:
+            return false;
+        case Hoitovapaa:
+            return true;
+        case tavallinenTyopaiva:
+            return true;
+        case tasausPaiva:
+            return true;
+        case hatatyo:
+            return true;
+        default:
+            throw new RuntimeException("tuntematon työmerkinnän tyyppi");
+        }
+    }
 }

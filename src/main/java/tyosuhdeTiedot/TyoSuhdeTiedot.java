@@ -111,7 +111,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         sopimuksenAlkuPv = sopimuksenAlkuPv2;
         tyoHistoria = th;
         viikkoTyoAika = viikkoTyoAika2;
-        selvitaAnsaintaSaanto();
     }
 
 
@@ -123,22 +122,15 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         sopimuksenAlkuPv = sopimuksenAlkuPv2;
         tyoHistoria = th;
         viikkoTyoAika = null;
-        selvitaAnsaintaSaanto();
     }
 
 
     /**
-     * Katsotaan, onko työpäivien lukumäärä ollut keskimäärin yli 14 kuukaudessa.
+     * @param vuosi
      */
-    private void selvitaAnsaintaSaanto() {
-        long kuukausia = tyoHistoria.kestoKuukausina();
-        int tyoPaivia = tyoHistoria.getTyoPaivienLkm();
-        if (kuukausia == 0)
-            ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
-        else if (tyoPaivia / kuukausia >= 14)
-            ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
-        else
-            ansaintaSaanto = AnsaintaSaanto.Yli35TuntiaKuukaudessa;
+    @Override
+    public LomapalkanLaskutapa getLomapalkanLaskutapa() {
+        return lomapalkanLaskutapa;
     }
 
 
@@ -219,18 +211,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
                     .add(laskennallinenPalkka(kausi));
         }
         return laskennallinenPalkka;
-    }
-
-
-    @Override
-    public AnsaintaSaanto getAnsaintaSaanto() {
-        return ansaintaSaanto;
-    }
-
-
-    @Override
-    public LomapalkanLaskutapa getLomapalkanLaskutapa() {
-        return lomapalkanLaskutapa;
     }
 
 
@@ -379,6 +359,24 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
     @Override
     public BigDecimal getTyopaiviaViikossa() {
         return new BigDecimal(tyoPaiviaViikossa);
+    }
+
+
+    @Override
+    public AnsaintaSaanto getAnsaintaSaanto() {
+        return ansaintaSaanto;
+    }
+
+
+    @Override
+    public void selvitaAnsaintaSaanto(int vuosi) {
+        for (var kk : VuosilomaLaki.getLomaVuodenKuukaudet(vuosi)) {
+            if (tyoHistoria.mahdollisiaTyopaivia(kk) < 14) {
+                ansaintaSaanto = AnsaintaSaanto.Yli35TuntiaKuukaudessa;
+                break;
+            }
+        }
+        ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
     }
 
 }

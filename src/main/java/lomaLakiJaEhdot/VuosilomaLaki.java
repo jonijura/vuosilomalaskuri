@@ -1,6 +1,7 @@
 package lomaLakiJaEhdot;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import tyosuhdeTiedot.TyoHistoria;
 
@@ -119,6 +120,39 @@ public class VuosilomaLaki {
 
 
     /**
+     * Vuosilomalaki 11§ taulukko
+     * Jos lomapäivien määrä on suurempi kuin 30, kerrointa korotetaan luvulla 0,9 lomapäivää kohden.
+     * @param lomaPaivia
+     * @return
+     */
+    public BigDecimal getTuntipalkkaisenLomapalkkaKerroin(int lomaPaivia) {
+        if (lomaPaivia >= tuntipalkkaistenLomapalkkakertoimet.length)
+            return tuntipalkkaistenLomapalkkakertoimet[30].add(
+                    new BigDecimal("0.9").multiply(new BigDecimal(lomaPaivia
+                            - tuntipalkkaistenLomapalkkakertoimet.length + 1)));
+        return tuntipalkkaistenLomapalkkakertoimet[lomaPaivia];
+    }
+
+
+    /**
+     * @param vuosi
+     * @return
+     * Vuosilomalaki 4§1)
+     * lomanmääräytymisvuodella 1 päivän huhtikuuta ja 31 päivän maaliskuuta 
+     * välistä aikaa nämä päivät mukaan luettuina;
+     */
+    public static LocalDate[] getLomaVuodenKuukaudet(int vuosi) {
+        return new LocalDate[] { LocalDate.of(vuosi - 1, 4, 1),
+                LocalDate.of(vuosi - 1, 5, 1), LocalDate.of(vuosi - 1, 6, 1),
+                LocalDate.of(vuosi - 1, 7, 1), LocalDate.of(vuosi - 1, 8, 1),
+                LocalDate.of(vuosi - 1, 9, 1), LocalDate.of(vuosi - 1, 10, 1),
+                LocalDate.of(vuosi - 1, 11, 1), LocalDate.of(vuosi - 1, 12, 1),
+                LocalDate.of(vuosi, 1, 1), LocalDate.of(vuosi, 2, 1),
+                LocalDate.of(vuosi, 3, 1) };
+    }
+
+
+    /**
      * @param tyyppi
      * @return
      */
@@ -180,21 +214,6 @@ public class VuosilomaLaki {
             if (syy.equals(tyyppi))
                 return true;
         return false;
-    }
-
-
-    /**
-     * Vuosilomalaki 11§ taulukko
-     * Jos lomapäivien määrä on suurempi kuin 30, kerrointa korotetaan luvulla 0,9 lomapäivää kohden.
-     * @param lomaPaivia
-     * @return
-     */
-    public BigDecimal getTuntipalkkaisenLomapalkkaKerroin(int lomaPaivia) {
-        if (lomaPaivia >= tuntipalkkaistenLomapalkkakertoimet.length)
-            return tuntipalkkaistenLomapalkkakertoimet[30].add(
-                    new BigDecimal("0.9").multiply(new BigDecimal(lomaPaivia
-                            - tuntipalkkaistenLomapalkkakertoimet.length + 1)));
-        return tuntipalkkaistenLomapalkkakertoimet[lomaPaivia];
     }
 
 }

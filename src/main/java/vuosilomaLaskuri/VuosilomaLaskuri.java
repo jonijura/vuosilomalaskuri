@@ -64,7 +64,8 @@ public class VuosilomaLaskuri {
      */
     public int laskeLomapaivat(int vuosi) {
         LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
-        LocalDate[] lomavuodenKuukaudet = lomaVuodenKuukaudet(vuosi);
+        LocalDate[] lomavuodenKuukaudet = VuosilomaLaki
+                .getLomaVuodenKuukaudet(vuosi);
         int lomanMaaraytymiskk = 0;
         for (var kk : lomavuodenKuukaudet)
             if (tyoSuhdeTiedot.onkoTaysiLomanMaaraytymisiKK(kk))
@@ -78,24 +79,6 @@ public class VuosilomaLaskuri {
         return (int) (lomapaivaKerroin
                 .multiply(new BigDecimal(lomanMaaraytymiskk)))
                         .setScale(0, RoundingMode.HALF_UP).longValue();
-    }
-
-
-    /**
-     * @param vuosi
-     * @return
-     * Vuosilomalaki 4§1)
-     * lomanmääräytymisvuodella 1 päivän huhtikuuta ja 31 päivän maaliskuuta 
-     * välistä aikaa nämä päivät mukaan luettuina;
-     */
-    private LocalDate[] lomaVuodenKuukaudet(int vuosi) {
-        return new LocalDate[] { LocalDate.of(vuosi - 1, 4, 1),
-                LocalDate.of(vuosi - 1, 5, 1), LocalDate.of(vuosi - 1, 6, 1),
-                LocalDate.of(vuosi - 1, 7, 1), LocalDate.of(vuosi - 1, 8, 1),
-                LocalDate.of(vuosi - 1, 9, 1), LocalDate.of(vuosi - 1, 10, 1),
-                LocalDate.of(vuosi - 1, 11, 1), LocalDate.of(vuosi - 1, 12, 1),
-                LocalDate.of(vuosi, 1, 1), LocalDate.of(vuosi, 2, 1),
-                LocalDate.of(vuosi, 3, 1) };
     }
 
 
@@ -299,6 +282,7 @@ public class VuosilomaLaskuri {
      * @return
      */
     public VuosilomaPalkkalaskelma laskePalkkalaskelma(int vuosi) {
+        tyoSuhdeTiedot.selvitaAnsaintaSaanto(vuosi);
         this.vuosilomaPalkkalaskelma = new VuosilomaPalkkalaskelma();
         vuosilomaPalkkalaskelma.setTyosuhdeTiedot(tyoSuhdeTiedot);
         vuosilomaPalkkalaskelma.setLomaPaivat(laskeLomapaivat(vuosi));
