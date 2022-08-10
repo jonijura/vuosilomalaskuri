@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import lomaLakiJaEhdot.VuosilomaLaki;
 
 /**
@@ -165,41 +164,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      * @return
      */
     @Override
-    public BigDecimal getValinPalkka(LocalDate alku, LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
-                loppu);
-        return valinTyoHistoria.getPalkka();
-    }
-
-
-    @Override
-    public BigDecimal getValinPalkka(LocalDate alku, LocalDate loppu,
-            TyoMerkinnanTyyppi tyyppi) {
-        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
-                loppu, tyyppi);
-        return valinTyoHistoria.getPalkka();
-    }
-
-
-    /**
-     * @param alku
-     * @param loppu
-     * @return
-     */
-    @Override
-    public BigDecimal getValinBonukset(LocalDate alku, LocalDate loppu) {
-        TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
-                loppu);
-        return valinTyoHistoria.getBonukset();
-    }
-
-
-    /**
-     * @param alku
-     * @param loppu
-     * @return
-     */
-    @Override
     public BigDecimal getValinLaskennallinenPalkkaVapailta(LocalDate alku,
             LocalDate loppu) {
         TyoHistoria valinTyoHistoria = tyoHistoria.getValinMerkinnat(alku,
@@ -337,26 +301,6 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
      *
      */
     @Override
-    public BigDecimal getValinTyopaivienLkm(LocalDate alku, LocalDate loppu) {
-        return new BigDecimal(
-                tyoHistoria.getValinMerkinnat(alku, loppu).getTyoPaivienLkm());
-    }
-
-
-    /**
-     *
-     */
-    @Override
-    public BigDecimal getValinTuntienLkm(LocalDate alku, LocalDate loppu,
-            TyoMerkinnanTyyppi tyyppi) {
-        return tyoHistoria.getValinTuntienLkm(alku, loppu, tyyppi);
-    }
-
-
-    /**
-     *
-     */
-    @Override
     public BigDecimal getTyopaiviaViikossa() {
         return new BigDecimal(tyoPaiviaViikossa);
     }
@@ -390,6 +334,12 @@ public class TyoSuhdeTiedot implements TyosuhdeTiedotIF {
         }
         ansaintaSaanto = AnsaintaSaanto.Yli14PvKuukaudessa;
         return ansaintaSaanto;
+    }
+
+
+    @Override
+    public TyoHistoria getValinMerkinnat(LocalDate alku, LocalDate loppu) {
+        return tyoHistoria.getValinMerkinnat(alku, loppu);
     }
 
 }

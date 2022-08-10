@@ -76,40 +76,6 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
 
 
     /**
-     * @param loppu 
-     * @param alku
-     * @param tyyppi
-     * @return
-     */
-    public TyoHistoria getValinMerkinnat(LocalDate alku, LocalDate loppu,
-            TyoMerkinnanTyyppi tyyppi) {
-        var th = getValinMerkinnat(alku, loppu);
-        ArrayList<TyoPaivaMerkinta> thTyyppi = new ArrayList<TyoPaivaMerkinta>();
-        for (var tp : th)
-            if (tp.getPaivanTyyppi() == tyyppi)
-                thTyyppi.add(tp);
-        return new TyoHistoria(thTyyppi);
-    }
-
-
-    /**
-     * @param alku
-     * @param loppu
-     * @param tyyppi
-     * @return
-     */
-    public BigDecimal getValinTuntienLkm(LocalDate alku, LocalDate loppu,
-            TyoMerkinnanTyyppi tyyppi) {
-        BigDecimal tunteja = BigDecimal.ZERO;
-        var th = getValinMerkinnat(alku, loppu);
-        for (var tp : th)
-            if (tp.getPaivanTyyppi() == tyyppi)
-                tunteja.add(tp.getTehdytTunnit());
-        return tunteja;
-    }
-
-
-    /**
      * @return
      */
     public BigDecimal getPalkka() {
@@ -156,6 +122,49 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
             if (merkinta.sisaltyyKuukauteen(localDate))
                 merkinnat.add(merkinta);
         return new TyoHistoria(merkinnat);
+    }
+
+
+    /**
+     * @param tyyppi
+     * @return
+     */
+    public TyoHistoria getTyyppisetMerkinnat(TyoMerkinnanTyyppi tyyppi) {
+        ArrayList<TyoPaivaMerkinta> thTyyppi = new ArrayList<TyoPaivaMerkinta>();
+        for (var tp : historia)
+            if (tp.getPaivanTyyppi() == tyyppi)
+                thTyyppi.add(tp);
+        return new TyoHistoria(thTyyppi);
+    }
+
+
+    /**
+     * @return
+     */
+    public int getTyoPaivienLkm() {
+        int tyoPaivia = 0;
+        for (var tp : historia)
+            if (tp.getPaivanTyyppi() == TyoMerkinnanTyyppi.tavallinenTyopaiva)
+                tyoPaivia++;
+        return tyoPaivia;
+    }
+
+
+    /**
+     * @return
+     */
+    public BigDecimal getTuntipalkka() {
+        if (historia.size() == 0)
+            return BigDecimal.ZERO;
+        return historia.get(0).getTuntipalkka();
+    }
+
+
+    /**
+     * @return
+     */
+    public LocalDate getAlkuPvm() {
+        return historia.get(0).getPvm();
     }
 
 
@@ -213,36 +222,6 @@ public class TyoHistoria implements Iterable<TyoPaivaMerkinta> {
                 th.add(tm);
         }
         return new TyoHistoria(th);
-    }
-
-
-    /**
-     * @return
-     */
-    public int getTyoPaivienLkm() {
-        int tyoPaivia = 0;
-        for (var tp : historia)
-            if (tp.getPaivanTyyppi() == TyoMerkinnanTyyppi.tavallinenTyopaiva)
-                tyoPaivia++;
-        return tyoPaivia;
-    }
-
-
-    /**
-     * @return
-     */
-    public BigDecimal getTuntipalkka() {
-        if (historia.size() == 0)
-            return BigDecimal.ZERO;
-        return historia.get(0).getTuntipalkka();
-    }
-
-
-    /**
-     * @return
-     */
-    public LocalDate getAlkuPvm() {
-        return historia.get(0).getPvm();
     }
 
 

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import lomaLakiJaEhdot.TyoMerkinnanTyyppi;
 import lomaLakiJaEhdot.VuosilomaEhdot;
 import lomaLakiJaEhdot.VuosilomaLaki;
+import tyosuhdeTiedot.TyoHistoria;
 import tyosuhdeTiedot.TyoSuhdeTiedot;
 import tyosuhdeTiedot.TyosuhdeTiedotIF;
 
@@ -150,29 +151,27 @@ public class VuosilomaLaskuri {
     private BigDecimal tuntiPalkkaperusteinenLomapalkka(int vuosi) {
         LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
         LocalDate lomakaudenEnsimmainenPaiva = LocalDate.of(vuosi - 1, 4, 1);
+        TyoHistoria valinMerkinnat = tyoSuhdeTiedot.getValinMerkinnat(
+                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
         BigDecimal kerroin = vuosilomaEhdot
                 .getTuntipalkkaisenLomapalkkaKerroin(laskeLomapaivat(vuosi));
         vuosilomaPalkkalaskelma.setTuntipalkkaisenLomapalkkaKerroin(kerroin);
-        BigDecimal tyossaOloajanPalkka = tyoSuhdeTiedot.getValinPalkka(
-                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
-        BigDecimal hataToistaSaatuPalkka = tyoSuhdeTiedot.getValinPalkka(
-                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
-                TyoMerkinnanTyyppi.hatatyo);
-        BigDecimal ylitoistaSaatuPalkka = tyoSuhdeTiedot.getValinPalkka(
-                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
-                TyoMerkinnanTyyppi.ylityo);
-        BigDecimal tehtyjenTyopaivienMaara = tyoSuhdeTiedot
-                .getValinTyopaivienLkm(lomakaudenEnsimmainenPaiva,
-                        lomakaudenViimeinenPaiva);
-        BigDecimal ylityoTunteja = tyoSuhdeTiedot.getValinTuntienLkm(
-                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva,
-                TyoMerkinnanTyyppi.ylityo);
+        BigDecimal tyossaOloajanPalkka = valinMerkinnat.getPalkka();
+        BigDecimal hataToistaSaatuPalkka = valinMerkinnat
+                .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.hatatyo).getPalkka();
+        BigDecimal ylitoistaSaatuPalkka = valinMerkinnat
+                .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.ylityo).getPalkka();
+        int tehtyjenTyopaivienMaara = valinMerkinnat.getTyoPaivienLkm();
+        BigDecimal ylityoTunteja = valinMerkinnat
+                .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.ylityo)
+                .getTehdytTunnit();
         BigDecimal tyoPaiviaViikossa = tyoSuhdeTiedot.getTyopaiviaViikossa();
         BigDecimal palkkaIlmanYliHata = tyossaOloajanPalkka
                 .subtract(hataToistaSaatuPalkka.add(ylitoistaSaatuPalkka));
         vuosilomaPalkkalaskelma.setAnsiotIlmanYliTaiHata(palkkaIlmanYliHata);
-        BigDecimal laskennallisiaTyopaivia = tehtyjenTyopaivienMaara
-                .add(ylityoTunteja.multiply(new BigDecimal("0.125")));
+        BigDecimal laskennallisiaTyopaivia = new BigDecimal(
+                tehtyjenTyopaivienMaara)
+                        .add(ylityoTunteja.multiply(new BigDecimal("0.125")));
         vuosilomaPalkkalaskelma
                 .setLaskennallisiaTyopaivia(laskennallisiaTyopaivia);
         BigDecimal keskimaarainenViikkotyoAika = tyoPaiviaViikossa
@@ -202,8 +201,9 @@ public class VuosilomaLaskuri {
     private BigDecimal viikkoPalkkaperusteinenLomapalkka(int vuosi) {
         LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
         LocalDate lomakaudenEnsimmainenPaiva = LocalDate.of(vuosi - 1, 4, 1);
-        BigDecimal bonukset = tyoSuhdeTiedot.getValinBonukset(
+        TyoHistoria valinMerkinnat = tyoSuhdeTiedot.getValinMerkinnat(
                 lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
+        BigDecimal bonukset = valinMerkinnat.getBonukset();
         BigDecimal tuntiPalkka = tyoSuhdeTiedot
                 .viimeisinTuntipalkka(lomakaudenViimeinenPaiva);
         int lomaPaivia = laskeLomapaivat(vuosi);
@@ -254,10 +254,10 @@ public class VuosilomaLaskuri {
     private BigDecimal prosenttiperusteinenLomapalkka(int vuosi) {
         LocalDate lomakaudenViimeinenPaiva = LocalDate.of(vuosi, 3, 31);
         LocalDate lomakaudenEnsimmainenPaiva = LocalDate.of(vuosi - 1, 4, 1);
-        BigDecimal kaudenTyossaoloPalkka = tyoSuhdeTiedot.getValinPalkka(
+        TyoHistoria valinMerkinnat = tyoSuhdeTiedot.getValinMerkinnat(
                 lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
-        BigDecimal bonukset = tyoSuhdeTiedot.getValinBonukset(
-                lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);
+        BigDecimal kaudenTyossaoloPalkka = valinMerkinnat.getPalkka();
+        BigDecimal bonukset = valinMerkinnat.getBonukset();
         BigDecimal laskennallinenPalkkaVapailta = tyoSuhdeTiedot
                 .getValinLaskennallinenPalkkaVapailta(
                         lomakaudenEnsimmainenPaiva, lomakaudenViimeinenPaiva);

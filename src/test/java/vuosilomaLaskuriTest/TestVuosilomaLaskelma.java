@@ -63,7 +63,8 @@ public class TestVuosilomaLaskelma {
     public void alusta() {
         TyoHistoria th = TiedostonKasittelija
                 .lueTyoHistoria("vuosiloma_vuositunnit2.txt");
-        var tstA = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th);
+        var tstA = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1),
+                th.ilmanTyoajanTasauksia());
         var tstB = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,
                 new BigDecimal("37.5"));
         var tstC = new TyoSuhdeTiedot(LocalDate.of(2008, 6, 1), th,

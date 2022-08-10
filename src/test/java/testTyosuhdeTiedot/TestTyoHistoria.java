@@ -92,17 +92,19 @@ public class TestTyoHistoria {
         var th = new TyoHistoria(testikk);
         assertEquals(3,
                 th.getValinMerkinnat(LocalDate.of(2009, 8, 11),
-                        LocalDate.of(2009, 8, 28),
-                        TyoMerkinnanTyyppi.Hoitovapaa).merkintojenLkm());
+                        LocalDate.of(2009, 8, 28))
+                        .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.Hoitovapaa)
+                        .merkintojenLkm());
         assertEquals(4,
                 th.getValinMerkinnat(LocalDate.of(2008, 8, 11),
-                        LocalDate.of(2009, 8, 28),
-                        TyoMerkinnanTyyppi.Hoitovapaa).merkintojenLkm());
-        assertEquals(10,
-                th.getValinMerkinnat(LocalDate.of(2008, 8, 11),
-                        LocalDate.of(2009, 8, 28),
-                        TyoMerkinnanTyyppi.tavallinenTyopaiva)
+                        LocalDate.of(2009, 8, 28))
+                        .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.Hoitovapaa)
                         .merkintojenLkm());
+        assertEquals(10, th
+                .getValinMerkinnat(LocalDate.of(2008, 8, 11),
+                        LocalDate.of(2009, 8, 28))
+                .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.tavallinenTyopaiva)
+                .merkintojenLkm());
     }
 
 
