@@ -156,7 +156,8 @@ public class VuosilomaLaskuri {
         BigDecimal kerroin = vuosilomaEhdot
                 .getTuntipalkkaisenLomapalkkaKerroin(laskeLomapaivat(vuosi));
         vuosilomaPalkkalaskelma.setTuntipalkkaisenLomapalkkaKerroin(kerroin);
-        BigDecimal tyossaOloajanPalkka = valinMerkinnat.getPalkka();
+        BigDecimal tyossaOloajanPalkka = valinMerkinnat.getPalkka()
+                .add(valinMerkinnat.getBonukset());
         BigDecimal hataToistaSaatuPalkka = valinMerkinnat
                 .getTyyppisetMerkinnat(TyoMerkinnanTyyppi.hatatyo).getPalkka();
         BigDecimal ylitoistaSaatuPalkka = valinMerkinnat

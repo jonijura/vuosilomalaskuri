@@ -410,13 +410,14 @@ public class TestVuosilomaLaskelma {
          * vuorokautisen työajan enimmäismäärää, sopimuksessa sovitun säännöllisen 
          * työajan lisäksi tehtyjen työtuntien kahdeksasosa.
          * 
+         * testitiedoston bonus-sarakkeen summa lomanmääräytymiskauden aikana 1013€
          * tyotunteja 10€ tuntipalkalla 687.75, 11€ tuntipalkalla 642.5
-         * 10*687.75+11*642.5=13945
+         * (10*687.75+11*642.5)+1013=14958
          * 
          * tavallisia työpäiviä 196, ylityötunteja 0
          */
         assertEquals("Ansiot ilman yli- ja hätätöiden lisiä",
-                new BigDecimal("13945.00"), vlplC.getAnsiotIlmanYliTaiHata()
+                new BigDecimal("14958.00"), vlplC.getAnsiotIlmanYliTaiHata()
                         .setScale(2, RoundingMode.HALF_UP));
         assertEquals("Työpäivät ja kahdeksasosa ylitöistä", new BigDecimal(196),
                 vlplC.getLaskennallisiaTyopaivia().setScale(0,
@@ -426,13 +427,12 @@ public class TestVuosilomaLaskelma {
                 vlplC.getViikottaisienTyopaivienMaaraJaettunaViidella()
                         .setScale(0, RoundingMode.HALF_UP));
         /**
-         * tyotunteja 10€ tuntipalkalla 687.75, 11€ tuntipalkalla 642.5 =>
-         * ansiot 10*687.75+11*642.5=13945 tavallisia työpäiviä 196,
+         * ansiot 14958 tavallisia työpäiviä 196,
          * ylityötunteja 0
          * 
-         * 13945/196=71.15
+         * 14958/196=71.15
          */
-        assertEquals("Keskimääräinen päiväpalkka", new BigDecimal("71.15"),
+        assertEquals("Keskimääräinen päiväpalkka", new BigDecimal("76.32"),
                 vlplC.getKeskimaarainenPaivapalkka().setScale(2,
                         RoundingMode.HALF_UP));
         /**
@@ -443,12 +443,12 @@ public class TestVuosilomaLaskelma {
                         RoundingMode.HALF_UP));
         /**
          * Lomanmääräytymisvuoden ansio työssäolon ajalta ilman yli- ja
-         * hätätöiden korotusosia tai bonuksia 13945.00 € Tehdyt työpäivät + 1/8
-         * ylitöistä 196.00 Keskimääräinen päiväpalkka 13945.00 : 196.00 = 71.15
+         * hätätöiden korotusosia tai bonuksia 14958.00 € Tehdyt työpäivät + 1/8
+         * ylitöistä 196.00 Keskimääräinen päiväpalkka 14958.00 : 196.00 = 76.32
          * € Viikoittaisten työpäivien määrä jaettuna viidellä 1 Vuosilomalain
-         * mukainen kerroin 23.2 tuntipalkkaperusteinen lomaPalkka 71.15 * 1 * 23.2 = 1650.63
+         * mukainen kerroin 23.2 tuntipalkkaperusteinen lomaPalkka 76.32 * 1 * 23.2 = 1770.54
          */
-        assertEquals("Lomapalkka testitapaus C", new BigDecimal("1650.63"),
+        assertEquals("Lomapalkka testitapaus C", new BigDecimal("1770.54"),
                 vlplC.getLomaPalkka());
         /**
          * mahdolliset lomarahan maksuedellytykset:
@@ -464,6 +464,6 @@ public class TestVuosilomaLaskelma {
          * Lomaraha on 50 % vuosilomalain mukaan ansaittua lomaa vastaavasta lomapalkasta.
          */
         assertEquals("Lomarahan suuruus testitapaus C",
-                new BigDecimal("825.32"), vlplC.getLomarahanSuuruus());
+                new BigDecimal("885.27"), vlplC.getLomarahanSuuruus());
     }
 }
